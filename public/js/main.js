@@ -142,6 +142,7 @@ var playState = {
 
     update: function () {
         this.level.update();
+        this.obstacles.update();
         this.ui.update();
 
         for (var id in this.runners) {
