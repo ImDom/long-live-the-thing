@@ -3,6 +3,7 @@ var game, socket;
 var gameOptions = {
     width: 1024,
     height: 576,
+    floorHeight: 10,
     gravity: 450,
     runnerSpeed: 100
 };
@@ -23,11 +24,11 @@ var playState = {
         // Connect socket
         socket = io.connect('/game');
 
-        this.level = new Level(game);
+        this.level = new Level();
         this.level.create();
-        this.ui = new UI(game);
+        this.ui = new UI();
         this.ui.create();
-        this.obstacles = new Obstacles(game);
+        this.obstacles = new Obstacles();
         this.obstacles.create();
         this.players = [];
 
