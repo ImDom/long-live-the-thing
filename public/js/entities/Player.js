@@ -52,8 +52,6 @@ Player.prototype = {
         if (this.canJump) {
             this.canJump = false;
             this.runnerSpeedBeforeJump = this.runner.body.speed;
-            console.log(this.runnerSpeedBeforeJump);
-
             this.runner.body.velocity.y = this.jumpForce;
         }
     },

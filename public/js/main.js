@@ -44,12 +44,12 @@ var playState = {
     bindController: function () {
         // Bind controller
         var _this = this;
-        socket.on("new player", function (data) {
-            _this.newRunner(data.id);
+        socket.on("new player", function () {
+            _this.newRunner(socket.id);
         });
 
-        socket.on("remove player", function (data) {
-            _this.removePlayer(data.id);
+        socket.on("remove player", function () {
+            _this.removePlayer(socket.id);
         });
 
         socket.on("controller action", function (data) {
@@ -57,7 +57,7 @@ var playState = {
                 case "jump":
                     game.paused = false;
                 
-                    var player = _this.findRunner(data.id);
+                    var player = _this.findRunner(socket.id);
                     if (player) {
                         player.jump();
                     }
@@ -83,7 +83,9 @@ var playState = {
     },
 
     newRunner: function (id) {
-        this.runners[id] = new Player(id, this.onRunnerDied.bind(this));
+        if (!this.runners[id] && !this.ghosts[id]) {
+            this.runners[id] = new Player(id, this.onRunnerDied.bind(this));
+        }
     },
 
     onRunnerDied: function (id) {

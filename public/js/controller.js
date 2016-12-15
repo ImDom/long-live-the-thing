@@ -1,17 +1,17 @@
 var socket = io.connect('/controller');
 
 var actions = {
-    moveForward: function() {
+    moveForward: function () {
         socket.emit('moveForward');
         console.log('Move Forward');
     },
 
-    moveBackward: function() {
+    moveBackward: function () {
         socket.emit('moveBackward');
         console.log('Move Backward');
     },
 
-    jump: function() {
+    jump: function () {
       socket.emit('controller action', {action: 'jump'});
       console.log('Jump');
     }
