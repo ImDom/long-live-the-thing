@@ -38,7 +38,9 @@ Obstacles = function() {
     var _this = this;
     setInterval(function () {
         //_this.addBlock();
-        _this.addPattern();
+        if (!game.paused) {
+            _this.addPattern();
+        }
     }, 45 * Math.abs(SPEED));
 };
 
