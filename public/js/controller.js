@@ -35,7 +35,7 @@ socket.on("start game", function (data) {
 document.getElementById("name").value = window.localStorage.getItem("name");
 
 document.getElementById('jump').addEventListener("touchstart", actions.jump, false);
-document.getElementById('ready').addEventListener("touchstart", actions.ready, false);
+document.getElementById('ready').addEventListener("touchend", actions.ready, false);
 document.getElementById('freeze').addEventListener("touchstart", actions.freeze, false);
 
 document.getElementById('jump').addEventListener("mousedown", actions.jump, false);
