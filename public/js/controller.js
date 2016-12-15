@@ -14,7 +14,13 @@ var actions = {
     jump: function () {
       socket.emit('controller action', {action: 'jump'});
       console.log('Jump');
+    },
+
+    freeze: function () {
+      socket.emit('controller action', {action: 'freeze'});
+      console.log('Freeze');
     }
 };
 
 document.getElementById('jump').addEventListener("touchstart", actions.jump, false);
+document.getElementById('freeze').addEventListener("touchstart", actions.freeze, false);

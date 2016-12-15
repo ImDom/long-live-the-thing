@@ -8,6 +8,7 @@ Player = function (id, onDieCallback) {
     this.jumpForce = -250;
     this.canJump = true;
     this.isDead = false;
+    this.isFrozen = false;
     this.onDieCallback = onDieCallback;
 
     //this.runner = game.add.sprite(300, game.world.height - this.size, "runner");
@@ -29,9 +30,11 @@ Player.prototype = {
         game.physics.arcade.collide(this.runner, obstaclesGroup);
         game.physics.arcade.collide(this.runner, floorGroup);
 
-        // if the hero as its feet on the ground, it can jump
+        // if the hero has its feet on the ground, it can jump
         if (this.runner.body.touching.down) {
-            this.canJump = true;
+            if (this.isFrozen === false) {
+                this.canJump = true;
+            }
             this.runner.body.velocity.x = 10;
             this.runner.animations.play('walk', 20, true);
         } else {
@@ -63,9 +66,10 @@ Player.prototype = {
     },
 
     freeze: function(milliSecs) {
+        console.log("freezing for ", milliSecs)
         var _this = this;
-        _this.canJump = false;
-        setTimeout(function() { _this.canJump = true; }, milliSecs)
+        _this.isFrozen = true;
+        setTimeout(function() { _this.isFrozen = false; }, milliSecs)
     },
 
     buildObstacle: function () {
