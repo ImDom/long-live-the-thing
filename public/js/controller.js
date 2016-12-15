@@ -21,22 +21,20 @@ var actions = {
       console.log('Freeze');
     },
 
-    startGame: function () {
-        socket.emit('controller action', {action: 'startGame'});
-        console.log("Start game");
+    ready: function () {
+        socket.emit('ready', {name: document.getElementById("name").value});
+        document.getElementById('controller').style.display = "flex";
+        document.getElementById('menu').style.display = "none";
     }
 };
 
 socket.on("start game", function (data) {
-    document.getElementById('controller').style.display = "flex";
-    document.getElementById('menu').style.display = "none";
 });
 
 document.getElementById('jump').addEventListener("touchstart", actions.jump, false);
-document.getElementById('startGame').addEventListener("touchstart", actions.startGame, false);
+document.getElementById('ready').addEventListener("touchstart", actions.ready, false);
 document.getElementById('freeze').addEventListener("touchstart", actions.freeze, false);
 
-
 document.getElementById('jump').addEventListener("mousedown", actions.jump, false);
-document.getElementById('startGame').addEventListener("mousedown", actions.startGame, false);
+document.getElementById('ready').addEventListener("mousedown", actions.ready, false);
 document.getElementById('freeze').addEventListener("mousedown", actions.freeze, false);

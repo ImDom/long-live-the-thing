@@ -50,7 +50,7 @@ var playState = {
         this.menu = game.add.text(
             game.world.width/2, 
             game.world.height/2, 
-            'Press start on your phone!', 
+            'Enter your name on your phone!', 
             { font: '30px Arial', fill: '#fff' }
         );
         this.menu.anchor.setTo(0.5, 0.5);
@@ -63,11 +63,43 @@ var playState = {
         this.numPlayers.anchor.setTo(0.5, 0.5);
     },
 
+    startCountdown: function () {
+        var time = 10;
+
+        if (this.countdownInterval || Object.keys(this.runners).length < 1) {
+            return;
+        }
+        
+        var _this = this;
+        this.countdownInterval = setInterval(function () {
+            _this.menu.destroy();
+            console.log("Start timer", time)
+            --time;
+
+            if (_this.timerText) {
+                _this.timerText.setText('The game starts in ' + time + ' seconds');
+            } else {
+                _this.timerText = game.add.text(
+                    game.world.width/2, 
+                    game.world.height/2, 
+                    'The game starts in ' + time + ' seconds', 
+                    { font: '30px Arial', fill: '#fff' }
+                );
+                _this.timerText.anchor.setTo(0.5, 0.5);
+            }
+
+            if (time <= 0) {
+                _this.startGame();
+                clearInterval(_this.countdownInterval);
+                _this.countdownInterval = undefined;
+                _this.timerText.destroy();
+            }
+        }, 1000);
+    },
+
     startGame: function () {
         if (game.paused) {
-            this.menu.destroy();
             game.paused = false;
-            console.log("Start game")
             socket.emit("start game");
         }
     },
@@ -76,7 +108,8 @@ var playState = {
         // Bind controller
         var _this = this;
         socket.on("new player", function (data) {
-            _this.newRunner(data.id);
+            _this.newRunner(data.name);
+            _this.startCountdown();
         });
 
         socket.on("remove player", function (data) {
@@ -102,11 +135,6 @@ var playState = {
                     if (player) {
                         player.freeze(gameOptions.freezeMs);
                     }
-                    break;
-
-                case "startGame":
-                    console.log("Hello")
-                    _this.startGame();
                     break;
             }
         });
@@ -134,6 +162,8 @@ var playState = {
     },
 
     newRunner: function (id) {
+        if (!game.paused) { return; }
+
         var runnerIndex = Object.keys(this.runners).length;
         if (!this.runners[id] && !this.ghosts[id] && runnerIndex < playerColors.length) {
             this.runners[id] = new Player(

@@ -59,13 +59,13 @@ function onSocketGameConnection (client) {
 function onSocketControllerConnection (client) {
     util.log('New player has connected: ' + client.id);
 
-    socketGame.emit('new player', { id: client.id });
-
     // Listen for client disconnected
     client.on('disconnect', onControllerDisconnect);
 
     // Listen for move player message
     client.on('controller action', onControllerAction);
+
+    client.on('ready', onControllerReady)
 }
 
 function onGameStart () {
@@ -73,20 +73,22 @@ function onGameStart () {
     socketController.emit("start game");
 }
 
+function onControllerReady (data) {
+    this.controllerName = data.name;
+
+    socketGame.emit('new player', { id: this.id, name: data.name });
+}
+
 // Socket client has disconnected
 function onControllerDisconnect () {
     util.log('Player has disconnected: ' + this.id);
 
-    socketGame.emit('remove player', { id: this.id });
+    socketGame.emit('remove player', { id: this.id, name: this.controllerName });
 }
 
 // Controller has triggered an action
 function onControllerAction (data) {
     console.log("Controller action", data);
     // Broadcast updated position to connected socket clients
-    socketGame.emit('controller action', {id: this.id, action: data.action});
-
-    if (data.action === "startGame") {
-        onGameStart();
-    }
+    socketGame.emit('controller action', {id: this.controllerName, action: data.action});
 }

@@ -42,8 +42,20 @@ body {
     flex-direction: column;
 }
 
-button {
+.container > * {
     flex: 1;
+}
+
+input {
+    font-family: 'Gotham', Arial;
+    font-size: 14px;
+    text-align: center;
+    text-transform: uppercase;
+    border: 0 none;
+    letter-spacing: 1em;
+}
+
+button {
     font-family: 'Gotham', Arial;
     font-size: 14px;
     border: 0;
