@@ -18,7 +18,7 @@ Obstacles = function() {
     var _this = this;
     setInterval(function () {
         _this.addBlock();
-    }, this.getRandomNumber(200, 1000));
+    }, this.getRandomNumber(500, 2000));
 };
 
 Obstacles.prototype = {
