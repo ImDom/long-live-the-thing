@@ -3,8 +3,14 @@
  */
 Level = function() {
     this.group = game.add.group();
+    this.background = game.add.tileSprite(
+        0,
+        0,
+        game.world.width,
+        game.world.height - gameOptions.floorHeight,
+        'background'
+    );
 
-    //this.background = game.add.tileSprite(0, 0, game.world.width, game.world.height, 'background');
     this.floor = game.add.tileSprite(
         0,
         game.world.height - gameOptions.floorHeight,
@@ -16,6 +22,8 @@ Level = function() {
     game.physics.enable(this.floor, Phaser.Physics.ARCADE);
     this.floor.body.immovable = true;
     this.group.add(this.floor);
+
+
 };
 
 Level.prototype = {

@@ -1,9 +1,9 @@
 var patterns = [
     [
-        'xxxx_x_xx_'
+        '#xxx_x_xx_'
     ],
     [
-        'x__xx__xx_'
+        'x__x#__xx_'
     ],
     [
         '__xx__x___',
@@ -11,21 +11,21 @@ var patterns = [
     ],
     [
         '____xx____',
-        '_xxxxxxxx_',
+        '_xxxxxx#x_',
         'xxxxxxxxx_'
     ],
     [
         '________xx',
-        'xxxxx_____',
+        'xxxxx#x___',
         '________xx',
-        '__xxxxxxxx',
+        '__xx#xxxxx',
         'xxxxxxxxxx'
     ],
     [
         '_xxxxxxxx_',
         '__________',
         '__________',
-        '____xxxxxx',
+        '____xxx#x#',
         '__xxxxxxxx',
         'xxxxxxxxxx'
     ],
@@ -99,7 +99,7 @@ Obstacles.prototype = {
                             game.world.height - 10 - 45 - (45 * ((pattern.length - 1) - rowIndex)),
                             45,
                             45,
-                            "obstacle"
+                            "danger"
                         );
                         break;
 

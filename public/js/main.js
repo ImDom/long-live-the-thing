@@ -16,10 +16,9 @@ var playState = {
         game.scale.pageAlignVertically = true;
 
         game.load.spritesheet('runnerSS', 'assets/runner_spritesheet.png', 50, 50);
-        game.load.image("runner", "assets/runner.png");
         game.load.image("ground", "assets/ground.png");
         game.load.image("background", "assets/sky.png");
-        game.load.image("obstacle", "assets/obstacle.png");
+        game.load.image("danger", "assets/danger.png");
         game.load.audio("music", "assets/song.mp3");
         game.load.audio("jump", "assets/jump.wav");
     },

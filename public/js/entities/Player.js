@@ -12,7 +12,7 @@ Player = function (id, runnerIndex, onDieCallback) {
     this.onDieCallback = onDieCallback;
 
     //this.runner = game.add.sprite(300, game.world.height - this.size, "runner");
-    this.runner = game.add.sprite(300, game.world.height - this.size, "runnerSS");
+    this.runner = game.add.sprite(game.world.width / 2, game.world.height / 1.5, "runnerSS");
     this.runner.animations.add('walk');
 
     this.runner.tint = playerColors[runnerIndex];
