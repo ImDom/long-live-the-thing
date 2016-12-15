@@ -24,7 +24,7 @@ var playState = {
 
     create: function () {
         // Connect socket
-        socket = io.connect('/game');
+        socket = io.connect('/game', { query: "gameStarted=" + !game.paused });
 
         game.paused = true;
 
@@ -38,8 +38,34 @@ var playState = {
         this.ghosts = [];
 
         this.bindController();
-
+    
         //game.sound.play('song');
+    },
+
+    showMenu: function () {
+        game.paused = true;
+        this.menu = game.add.text(
+            game.world.width/2, 
+            game.world.height/2, 
+            'Press start on your phone!', 
+            { font: '30px Arial', fill: '#fff' }
+        );
+        this.menu.anchor.setTo(0.5, 0.5);
+        this.numPlayers = game.add.text(
+            game.world.width/2, 
+            game.world.height/2 + 100, 
+            '', 
+            { font: '20px Arial', fill: '#fff' }
+        )
+        this.numPlayers.anchor.setTo(0.5, 0.5);
+    },
+
+    startGame: function () {
+        if (game.paused) {
+            this.menu.destroy();
+            game.paused = false;
+            socket.emit("hide menu")
+        }
     },
 
     bindController: function () {
@@ -51,6 +77,10 @@ var playState = {
 
         socket.on("remove player", function () {
             _this.removePlayer(socket.id);
+        });
+
+        socket.on("start game", function (data) {
+            _this.startGame();
         });
 
         socket.on("controller action", function (data) {
@@ -105,6 +135,10 @@ var playState = {
         }
     },
 
+    updateNumPlayersText: function () {
+        this.numPlayers.setText(Object.keys(this.players).length + " players connected");
+    },
+
     checkState: function () {
         if (Object.keys(this.runners).length === 0) {
             // TODO - All runners are dead, endgame
@@ -117,11 +151,11 @@ var playState = {
     }
 };
 
+
 window.onload = function() {
     game = new Phaser.Game(gameOptions.width, gameOptions.height);
 
     // adding game states
-    //game.state.add("menu", menuState);
     game.state.add("play", playState);
 
     // starting the first game state
