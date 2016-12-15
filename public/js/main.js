@@ -24,7 +24,6 @@ var playState = {
         // Connect socket
         socket = io.connect('/game');
 
-        game.paused = true;
         // Add the physics engine to all game objects
         game.world.enableBody = true;
 
@@ -35,7 +34,7 @@ var playState = {
 
         this.bindController();
 
-        game.sound.play('song');
+        //game.sound.play('song');
     },
 
     bindController: function () {
@@ -62,10 +61,10 @@ var playState = {
         this.level.update();
         this.ui.update();
         this.checkState();
-
+        
         for (var id in this.players) {
             var player = this.players[id];
-            player.update(this.obstacles.group, this.level.floor);
+            player.update(this.obstacles.group, this.level.group);
         }
     },
 

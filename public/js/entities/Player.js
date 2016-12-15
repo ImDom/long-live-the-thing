@@ -1,7 +1,7 @@
 /**
- * Create the Level and move the floor and obstacles
+ * Create a player
  */
-Player = function(id) {
+Player = function (id) {
     this.id = id;
     this.size = 16;
     this.gravity = 450;
@@ -24,7 +24,8 @@ Player.prototype = {
         game.physics.arcade.collide(this.runner, obstaclesGroup);
         game.physics.arcade.collide(this.runner, floorGroup);
 
-        if (this.runner.body.touching.down){
+        // if the hero as its feet on the ground, it can jump
+        if (this.runner.body.touching.down) {
             this.canJump = true;
             this.runner.body.velocity.x = 0;
         } else {
