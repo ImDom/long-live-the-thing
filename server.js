@@ -3,6 +3,7 @@ var http = require('http');
 var path = require('path');
 var ecstatic = require('ecstatic');
 var io = require('socket.io');
+var playerColors = require('./playerColors');
 
 var port = process.env.PORT || 8080;
 
@@ -26,7 +27,7 @@ var server = http.createServer(
     }
 
     init();
-})
+});
 
 function init () {
     // Attach Socket.IO to server
@@ -57,7 +58,7 @@ function onSocketGameConnection (client) {
 function onSocketControllerConnection (client) {
     util.log('New player has connected: ' + client.id);
 
-    socketGame.emit('new player', {id: client.id});
+    socketGame.emit('new player', {id: client.id, playerColor: playerColors[controllerCount]});
 
     // Listen for client disconnected
     client.on('disconnect', onControllerDisconnect);
