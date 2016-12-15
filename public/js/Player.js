@@ -33,7 +33,7 @@ Player.prototype.update = function (groundGroup, fieldGroup) {
 
     if (this.runner.x < 0 || this.runner.x > 900) {
         this.runner.x = 300;
-    } 
+    }
 }
 
 Player.prototype.jump = function () {
