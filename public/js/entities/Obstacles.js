@@ -16,20 +16,20 @@ Obstacles.prototype = {
 
     add: function () {
         this.sprite = game.add.tileSprite(
-            game.world.width + 40,
-            game.world.height - 40,
+            game.world.width + 50,
+            game.world.height - 50,
             70,
-            70,
+            50,
             "ground"
         );
 
-        this.sprite.body.velocity.x = -60;
+        this.sprite.body.velocity.x = -100;
         this.sprite.body.friction.y = 0;
         this.sprite.body.friction.x = 0;
         this.sprite.body.immovable = true;
 
         // let's enable ARCADE physics on floors too
-        game.physics.enable(this.sprite, Phaser.Physics.ARCADE);
+        //game.physics.enable(this.sprite, Phaser.Physics.ARCADE);
 
         this.group.add(this.sprite);
     }
