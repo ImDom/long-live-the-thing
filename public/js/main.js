@@ -20,7 +20,8 @@ var playState = {
         game.load.image("ground", "assets/ground.png");
         game.load.image("background", "assets/sky.png");
         game.load.image("obstacle", "assets/obstacle.png");
-        game.load.audio("song", "assets/song.mp3");
+        game.load.audio("music", "assets/song.mp3");
+        game.load.audio("jump", "assets/jump.wav");
     },
 
     create: function () {
@@ -41,8 +42,9 @@ var playState = {
         this.bindController();
 
         this.showMenu();
-    
-        //game.sound.play('song');
+        var music = game.add.audio("music");
+        music.loopFull();
+        music.volume = 0.05;
     },
 
     showMenu: function () {

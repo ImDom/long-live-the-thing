@@ -22,6 +22,9 @@ Player = function (id, runnerIndex, onDieCallback) {
 
     game.physics.enable(this.runner, Phaser.Physics.ARCADE);
     this.runner.body.gravity.y = this.gravity;
+
+    this.jumpSound = game.add.audio("jump");
+    this.jumpSound.volume = 0.1;
 };
 
 Player.prototype = {
@@ -58,6 +61,7 @@ Player.prototype = {
 
     jump: function () {
         if (this.canJump) {
+            this.jumpSound.play();
             this.canJump = false;
             this.runner.animations.stop('walk');
             this.runnerSpeedBeforeJump = this.runner.body.speed;
