@@ -25,11 +25,14 @@ var actions = {
         socket.emit('ready', {name: document.getElementById("name").value});
         document.getElementById('controller').style.display = "flex";
         document.getElementById('menu').style.display = "none";
+        window.localStorage.setItem("name", document.getElementById("name").value);
     }
 };
 
 socket.on("start game", function (data) {
 });
+
+document.getElementById("name").value = window.localStorage.getItem("name");
 
 document.getElementById('jump').addEventListener("touchstart", actions.jump, false);
 document.getElementById('ready').addEventListener("touchstart", actions.ready, false);
