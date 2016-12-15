@@ -3,15 +3,19 @@
  */
 Player = function (id, onDieCallback) {
     this.id = id;
-    this.size = 16;
+    this.size = 30;
     this.gravity = 450;
-    this.jumpForce = -200;
+    this.jumpForce = -250;
     this.canJump = true;
     this.isDead = false;
     this.onDieCallback = onDieCallback;
 
-    this.runner = game.add.sprite(300, game.world.height - this.size, "runner");
+    //this.runner = game.add.sprite(300, game.world.height - this.size, "runner");
+    this.runner = game.add.sprite(300, game.world.height - this.size, "runnerSS");
+    this.runner.animations.add('walk');
 
+    this.runner.animations.play('walk', 20, true);
+    
     this.runner.anchor.set(0.5);
     this.runner.width = this.size;
     this.runner.height = this.size;

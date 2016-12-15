@@ -14,6 +14,7 @@ var playState = {
         game.scale.pageAlignHorizontally = true;
         game.scale.pageAlignVertically = true;
 
+        game.load.spritesheet('runnerSS', 'assets/runner_spritesheet.png', 50, 50);
         game.load.image("runner", "assets/runner.png");
         game.load.image("ground", "assets/ground.png");
         game.load.image("background", "assets/sky.png");
@@ -55,10 +56,9 @@ var playState = {
         socket.on("controller action", function (data) {
             switch (data.action) {
                 case "jump":
-                    game.paused = false;
-                
                     var player = _this.findRunner(socket.id);
                     if (player) {
+                        game.paused = false;
                         player.jump();
                     }
                     break;
@@ -108,6 +108,7 @@ var playState = {
     checkState: function () {
         if (Object.keys(this.runners).length === 0) {
             // TODO - All runners are dead, endgame
+            game.paused = true;
         }
     },
 

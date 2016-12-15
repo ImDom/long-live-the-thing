@@ -18,7 +18,7 @@ Obstacles.prototype = {
         this.sprite = game.add.tileSprite(
             game.world.width + 50,
             game.world.height - 45,
-            70,
+            75,
             45,
             "ground"
         );
