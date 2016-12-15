@@ -1,13 +1,14 @@
 /**
  * Create a player
  */
-Player = function (id) {
+Player = function (id, onDieCallback) {
     this.id = id;
     this.size = 16;
     this.gravity = 450;
     this.jumpForce = -200;
     this.canJump = true;
     this.isDead = false;
+    this.onDieCallback = onDieCallback;
 
     this.runner = game.add.sprite(300, game.world.height - this.size, "runner");
 
@@ -34,16 +35,17 @@ Player.prototype = {
 
         if (this.runner.x < 0) {
             this.die();
-        }
-
-        if (this.runner.x > 900) {
+        } else if (this.runner.x > 900) {
             this.runner.x = 300;
         }
+
+        return this.isDead;
     },
 
     die: function () {
         this.isDead = true;
         this.runner.kill();
+        this.onDieCallback(this.id);
     },
 
     jump: function () {

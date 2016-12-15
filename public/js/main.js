@@ -33,7 +33,8 @@ var playState = {
         this.level = new Level();
         this.ui = new UI();
         this.obstacles = new Obstacles();
-        this.players = [];
+        this.runners = [];
+        this.ghosts = [];
 
         this.bindController();
 
@@ -44,7 +45,7 @@ var playState = {
         // Bind controller
         var _this = this;
         socket.on("new player", function (data) {
-            _this.newPlayer(data.id);
+            _this.newRunner(data.id);
         });
 
         socket.on("remove player", function (data) {
@@ -56,7 +57,7 @@ var playState = {
                 case "jump":
                     game.paused = false;
                 
-                    var player = _this.findPlayer(data.id);
+                    var player = _this.findRunner(data.id);
                     if (player) {
                         player.jump();
                     }
@@ -68,28 +69,44 @@ var playState = {
     update: function () {
         this.level.update();
         this.ui.update();
-        this.checkState();
-        
-        for (var id in this.players) {
-            var player = this.players[id];
+
+        for (var id in this.runners) {
+            var player = this.runners[id];
             player.update(this.obstacles.group, this.level.group);
+        }
+
+        this.checkState();
+    },
+
+    findRunner: function (id) {
+        return this.runners[id];
+    },
+
+    newRunner: function (id) {
+        this.runners[id] = new Player(id, this.onRunnerDied.bind(this));
+    },
+
+    onRunnerDied: function (id) {
+        var runner = this.findRunner(id);
+        if (runner) {
+            console.log("this runner died:", runner);
+            this.ghosts.push(runner);
+            delete this.runners[id];
         }
     },
 
-    findPlayer: function (id) {
-        return this.players[id];
-    },
-
-    newPlayer: function (id) {
-        this.players[id] = new Player(id);
-    },
-
     removePlayer: function (id) {
-        delete this.players[id];
+        if (this.runners.indexOf(id) > -1) {
+            delete this.runners[id]
+        } else if (this.ghosts.indexOf(id) > -1) {
+            delete this.ghosts[id];
+        }
     },
 
     checkState: function () {
-        // TODO - All player are dead, endgame
+        if (Object.keys(this.runners).length === 0) {
+            // TODO - All runners are dead, endgame
+        }
     },
 
     endGame: function () {
