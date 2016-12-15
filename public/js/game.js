@@ -8,16 +8,16 @@ function preload () {
   game.load.spritesheet('enemy', 'assets/dude.png', 64, 64)
 }
 
-var socket // Socket connection
+var socket; // Socket connection
 
-var land
+var land;
 
-var player
+var player;
 
-var enemies
+var enemies;
 
 var currentSpeed = 0
-var cursors
+var cursors;
 
 function create () {
   socket = io.connect("/game")
