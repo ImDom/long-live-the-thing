@@ -118,7 +118,7 @@ var playState = {
 
         for (var id in this.runners) {
             var player = this.runners[id];
-            player.update(this.obstacles.group, this.level.group);
+            player.update(this.obstacles.blockGroup, this.obstacles.killGroup, this.level.group);
         }
 
         this.checkState();

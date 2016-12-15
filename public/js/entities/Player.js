@@ -5,7 +5,7 @@ Player = function (id, runnerIndex, onDieCallback) {
     this.id = id;
     this.size = 30;
     this.gravity = 1000;
-    this.jumpForce = -320;
+    this.jumpForce = -350;
     this.canJump = true;
     this.isDead = false;
     this.isFrozen = false;
@@ -27,8 +27,9 @@ Player = function (id, runnerIndex, onDieCallback) {
 };
 
 Player.prototype = {
-    update: function (obstaclesGroup, floorGroup) {
-        game.physics.arcade.collide(this.runner, obstaclesGroup);
+    update: function (blockGroup, killGroup, floorGroup) {
+        game.physics.arcade.collide(this.runner, blockGroup);
+        game.physics.arcade.collide(this.runner, killGroup, this.die.bind(this));
         game.physics.arcade.collide(this.runner, floorGroup);
 
         // if the hero has its feet on the ground, it can jump
@@ -44,7 +45,7 @@ Player.prototype = {
 
         if (this.runner.x < 0) {
             this.die();
-        } else if (this.runner.x > 900) {
+        } else if (this.runner.x > game.world.width) {
             this.runner.x = 300;
         }
 

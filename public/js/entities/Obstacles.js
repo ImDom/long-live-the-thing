@@ -1,37 +1,72 @@
 /**
- * Create an obstacle 
+ * Generates obstacles
  */
-
 Obstacles = function() {
-    this.group = game.add.group();
+    this.width = {
+        min: 20,
+        max: 100
+    };
+
+    this.height = {
+        min: 20,
+        max: 70
+    };
+
+    this.blockGroup = game.add.group();
+    this.killGroup = game.add.group();
 
     var _this = this;
     setInterval(function () {
-        _this.add();
-    }, 3000);
+        _this.addBlock();
+    }, this.getRandomNumber(200, 1000));
 };
 
 Obstacles.prototype = {
     update: function () {},
 
-    add: function () {
+    addHole: function () {
         this.sprite = game.add.tileSprite(
-            game.world.width,
-            game.world.height - 10 - 45, // 10 for the floor, 45 for obstacle height
-            45 * 2,  // obstacle width
-            45,  // obstacle height
-            "ground"
+            game.world.width + 50,
+            game.world.height - 45,
+            this.getRandomNumber(this.width.min, this.width.max),
+            10,
+            "obstacle"
         );
 
-        this.sprite.body.velocity.x = -120;
+        this.sprite.body.velocity.x = -200;
         this.sprite.body.friction.y = 0;
         this.sprite.body.friction.x = 0;
         this.sprite.body.immovable = true;
 
-        // let's enable ARCADE physics on floors too
-        //game.physics.enable(this.sprite, Phaser.Physics.ARCADE);
+        this.killGroup.add(this.sprite);
+    },
 
-        this.group.add(this.sprite);
+    addBlock: function () {
+        var width = this.getRandomNumber(this.width.min, this.width.max);
+        var height = this.getRandomNumber(this.height.min, this.height.max);
+
+        this.sprite = game.add.tileSprite(
+            game.world.width + width,
+            game.world.height - height,
+            width,
+            height,
+            "ground"
+        );
+
+        this.sprite.body.velocity.x = -200;
+        this.sprite.body.friction.y = 0;
+        this.sprite.body.friction.x = 0;
+        this.sprite.body.immovable = true;
+
+        this.blockGroup.add(this.sprite);
+    },
+
+    addBomb: function () {
+
+    },
+
+    getRandomNumber: function (min, max) {
+        return Math.random() * (max - min) + min;
     }
 };
 
