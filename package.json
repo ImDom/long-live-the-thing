@@ -1,0 +1,21 @@
+{
+  "name": "long-live-the-thing",
+  "version": "1.0.0",
+  "description": "Mp game",
+  "main": "lib/game.js",
+  "scripts": {
+    "start": "node .",
+    "dev": "nodemon .",
+    "lint": "standard --verbose | snazzy"
+  },
+  "author": "LOL",
+  "license": "MIT",
+  "dependencies": {
+    "ecstatic": "^1.0.1",
+    "socket.io": "^1.4.5"
+  },
+  "devDependencies": {
+    "nodemon": "^0.7.10",
+    "standard": "^5.3.1"
+  }
+}
