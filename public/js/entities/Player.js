@@ -1,7 +1,7 @@
 /**
  * Create a player
  */
-Player = function (id, onDieCallback) {
+Player = function (id, runnerIndex, onDieCallback) {
     this.id = id;
     this.size = 30;
     this.gravity = 450;
@@ -15,7 +15,8 @@ Player = function (id, onDieCallback) {
     this.runner.animations.add('walk');
 
     this.runner.animations.play('walk', 20, true);
-    
+
+    this.runner.tint = playerColors[runnerIndex];
     this.runner.anchor.set(0.5);
     this.runner.width = this.size;
     this.runner.height = this.size;
@@ -35,7 +36,7 @@ Player.prototype = {
             this.runner.body.velocity.x = 0;
             this.runner.animations.play('walk', 20, true);
         } else {
-            this.runner.body.velocity.x = 5;
+            this.runner.body.velocity.x = 10;
         }
 
         if (this.runner.x < 0) {

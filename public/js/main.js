@@ -83,8 +83,13 @@ var playState = {
     },
 
     newRunner: function (id) {
-        if (!this.runners[id] && !this.ghosts[id]) {
-            this.runners[id] = new Player(id, this.onRunnerDied.bind(this));
+        var runnerIndex = Object.keys(this.runners).length;
+        if (!this.runners[id] && !this.ghosts[id] && runnerIndex < playerColors.length) {
+            this.runners[id] = new Player(
+                id,
+                runnerIndex,
+                this.onRunnerDied.bind(this)
+            );
         }
     },
 

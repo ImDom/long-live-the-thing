@@ -3,7 +3,6 @@ var http = require('http');
 var path = require('path');
 var ecstatic = require('ecstatic');
 var io = require('socket.io');
-var playerColors = require('./playerColors');
 
 var port = process.env.PORT || 8080;
 
