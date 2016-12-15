@@ -1,6 +1,6 @@
 var socket = io.connect('/controller');
 
-socket.emit('new player', { x: 10, y: 10, angle:10 })
+socket.emit('new player', { x: 10, y: 10, angle:10 });
 
 var actions = {
     moveForward: function() {
