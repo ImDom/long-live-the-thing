@@ -1,3 +1,46 @@
+var patterns = [
+    [
+        'xxxx_x_xx_'
+    ],
+    [
+        'x__xx__xx_'
+    ],
+    [
+        '__xx__x___',
+        'xxxxxxxxx_'
+    ],
+    [
+        '____xx____',
+        '_xxxxxxxx_',
+        'xxxxxxxxx_'
+    ],
+    [
+        '________xx',
+        'xxxxx_____',
+        '________xx',
+        '__xxxxxxxx',
+        'xxxxxxxxxx'
+    ],
+    [
+        '_xxxxxxxx_',
+        '__________',
+        '__________',
+        '____xxxxxx',
+        '__xxxxxxxx',
+        'xxxxxxxxxx'
+    ],
+    [
+        '_xxxxxxxx_',
+        '__________',
+        '__________',
+        '__xxx____x',
+        '_______xxx',
+        'xxxxxx#xxx'
+    ]
+];
+
+var SPEED = -120;  // This speed has to work with Player jump force and gravity
+
 /**
  * Generates obstacles
  */
@@ -15,25 +58,82 @@ Obstacles = function() {
     this.blockGroup = game.add.group();
     this.killGroup = game.add.group();
 
-    var _this = this;
-    setInterval(function () {
-        _this.addBlock();
-    }, this.getRandomNumber(500, 2000));
+    game.time.events.loop(3750, this.addPattern, this);
 };
 
 Obstacles.prototype = {
     update: function () {},
 
+    addPattern: function () {
+        var patternIndex = Math.floor(Math.random() * patterns.length);
+        var pattern = patterns[patternIndex];
+        console.log("Making pattern", patternIndex, patterns.length, pattern);
+
+        for (var rowIndex = 0; rowIndex < pattern.length; rowIndex++) {
+            var row = pattern[rowIndex];
+
+            if (row.length !== 10) {
+                throw new Error("Row length has to be 10!");
+            }
+
+            for (var colIndex = 0; colIndex < row.length; colIndex++) {
+                var part = row[colIndex];
+                var kill = false;
+                var sprite;
+
+                switch (part) {
+                    case "x":
+                        sprite = game.add.tileSprite(
+                            game.world.width + (45 * colIndex),
+                            game.world.height - 10 - 45 - (45 * ((pattern.length - 1) - rowIndex)),
+                            45,
+                            45,
+                            "ground"
+                        );
+                        break;
+
+                    case "#":
+                        kill = true;
+                        sprite = game.add.tileSprite(
+                            game.world.width + (45 * colIndex),
+                            game.world.height - 10 - 45 - (45 * ((pattern.length - 1) - rowIndex)),
+                            45,
+                            45,
+                            "obstacle"
+                        );
+                        break;
+
+                    case "_":
+                        // Nothing
+                        break;
+                }
+
+                if (sprite) {
+                    sprite.body.velocity.x = SPEED;
+                    sprite.body.friction.y = 0;
+                    sprite.body.friction.x = 0;
+                    sprite.body.immovable = true;
+
+                    if (kill) {
+                        this.killGroup.add(sprite);
+                    } else {
+                        this.blockGroup.add(sprite);
+                    }
+                }
+            }
+        }
+    },
+
     addHole: function () {
         this.sprite = game.add.tileSprite(
-            game.world.width + 50,
-            game.world.height - 45,
+            game.world.width,
+            game.world.height - 10 - 45,
             this.getRandomNumber(this.width.min, this.width.max),
             10,
             "obstacle"
         );
 
-        this.sprite.body.velocity.x = -200;
+        this.sprite.body.velocity.x = SPEED;
         this.sprite.body.friction.y = 0;
         this.sprite.body.friction.x = 0;
         this.sprite.body.immovable = true;
@@ -46,14 +146,14 @@ Obstacles.prototype = {
         var height = this.getRandomNumber(this.height.min, this.height.max);
 
         this.sprite = game.add.tileSprite(
-            game.world.width + width,
-            game.world.height - height,
+            game.world.width,
+            game.world.height - 10 - height,
             width,
             height,
             "ground"
         );
 
-        this.sprite.body.velocity.x = -200;
+        this.sprite.body.velocity.x = SPEED;
         this.sprite.body.friction.y = 0;
         this.sprite.body.friction.x = 0;
         this.sprite.body.immovable = true;
