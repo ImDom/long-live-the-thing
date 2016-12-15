@@ -36,7 +36,7 @@ Player.prototype = {
             if (this.isFrozen === false) {
                 this.canJump = true;
             }
-            this.runner.body.velocity.x = 0;
+            this.runner.body.velocity.x = 5;
             this.runner.animations.play('walk', 20, true);
         } else {
             this.runner.body.velocity.x = 10;
