@@ -24,7 +24,6 @@
 
 html, body, #controller {
     height: 100%;
-    -webkit-overflow-scrolling: none;
 }
 
 html {
