@@ -16,6 +16,7 @@ var playState = {
         game.load.image("ground", "assets/ground.png");
         game.load.image("background", "assets/sky.png");
         game.load.image("obstacle", "assets/obstacle.png");
+        game.load.audio("song", "assets/song.mp3");
     },
 
     create: function () {
@@ -26,20 +27,33 @@ var playState = {
         this.level.create();
         this.ui = new UI(game);
         this.ui.create();
-
         this.obstacles = new Obstacles(game);
         this.obstacles.create();
+        this.players = [];
 
-        // TODO - Create player via controller action "start"
-        this.player = new Player(game);
-        this.player.create();
+        // Add the physics engine to all game objects
+        game.world.enableBody = true;
 
+        this.bindController();
+
+        game.sound.play('song');
+    },
+
+    bindController: function () {
         // Bind controller
         var _this = this;
+        socket.on("new player", function (data) {
+            _this.newPlayer(data.id);
+        });
+
+        socket.on("remove player", function (data) {
+            _this.removePlayer(data.id);
+        });
+
         socket.on("controller action", function (data) {
             switch (data.action) {
                 case "jump":
-                    _this.squareJump();
+                    _this.findPlayer(data.id).jump();
                     break;
             }
         });
@@ -47,10 +61,25 @@ var playState = {
 
     update: function () {
         this.level.update();
-        this.player.update();
         this.ui.update();
         this.checkState();
-        game.physics.arcade.collide(this.player.sprite, this.obstacles.group, this.player.onHit);
+
+        for (var id in this.players) {
+            var player = this.players[id];
+            player.update(this.obstacles.group, this.level.floor);
+        }
+    },
+
+    findPlayer: function(id) {
+        return this.players[id];
+    },
+
+    newPlayer: function (id) {
+        this.players[id] = new Player(id);
+    },
+
+    removePlayer: function (id) {
+        delete this.players[id];
     },
 
     checkState: function () {

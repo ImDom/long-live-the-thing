@@ -41,6 +41,8 @@ var RunnerGame = {
         // adding the hero on the first floor
         this.players = [];
 
+
+        game.paused = true;
         // Add the physics engine to all game objects
         game.world.enableBody = true;
 
@@ -76,6 +78,7 @@ var RunnerGame = {
         socket.on("controller action", function (data) {
             switch (data.action) {
                 case "jump":
+                    game.paused = false;
                     _this.findPlayer(data.id).jump();
                     break;
             }
