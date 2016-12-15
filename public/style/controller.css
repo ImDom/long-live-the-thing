@@ -1,5 +1,35 @@
+@font-face {
+    font-family: Gotham;
+    font-weight: 100;
+    src: url('../assets/fonts/gotham-thin-webfont.ttf');
+}
+
+@font-face {
+    font-family: Gotham;
+    font-weight: 300;
+    src: url('../assets/fonts/gotham-light-webfont.ttf');
+}
+
+@font-face {
+    font-family: Gotham;
+    font-weight: 400;
+    src: url('../assets/fonts/gotham-book-webfont.ttf');
+}
+
+@font-face {
+    font-family: Gotham;
+    font-weight: 500;
+    src: url('../assets/fonts/gotham-medium-webfont.ttf');
+}
+
 html, body, #controller {
     height: 100%;
+}
+
+body {
+    font-family: 'Gotham', Arial;
+    font-size: 12px;
+    font-weight: 400;
 }
 
 #controller {
@@ -11,14 +41,16 @@ html, body, #controller {
 
 button {
     width: 100%;
+    font-family: 'Gotham', Arial;
     font-size: 14px;
+    font-weight: 500;
     padding: 20px 0;
     border: 0;
     background-color: #4444ff;
     outline: 0;
     color: #fff;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.2em;
     -webkit-user-select: none;
     -webkit-appearance: none;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
