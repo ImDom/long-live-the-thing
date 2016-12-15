@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8' />
+    <title>Phaser multiplayer game</title>
+    <link type='text/css' rel='stylesheet' href='/style/reset.css' />
+    <link type='text/css' rel='stylesheet' href='/style/game.css' />
+    <script src='/socket.io/socket.io.js'></script>
+    <script>
+        var socket = io();
+    </script>
+    <script src='/js/controller.js'></script>
+</head>
+<body>
+    <div id="controller">
+        <button onclick="actions.jump()">Jump</button>
+    </div>
+</body>
+</html>
