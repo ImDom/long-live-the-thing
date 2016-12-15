@@ -4,8 +4,8 @@
 Player = function (id, runnerIndex, onDieCallback) {
     this.id = id;
     this.size = 30;
-    this.gravity = 450;
-    this.jumpForce = -250;
+    this.gravity = 1000;
+    this.jumpForce = -320;
     this.canJump = true;
     this.isDead = false;
     this.isFrozen = false;

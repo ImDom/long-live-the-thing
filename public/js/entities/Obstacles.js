@@ -17,13 +17,13 @@ Obstacles.prototype = {
     add: function () {
         this.sprite = game.add.tileSprite(
             game.world.width,
-            game.world.height - 45,
-            45 * 2,
-            45,
+            game.world.height - 10 - 45, // 10 for the floor, 45 for obstacle height
+            45 * 2,  // obstacle width
+            45,  // obstacle height
             "ground"
         );
 
-        this.sprite.body.velocity.x = -200;
+        this.sprite.body.velocity.x = -120;
         this.sprite.body.friction.y = 0;
         this.sprite.body.friction.x = 0;
         this.sprite.body.immovable = true;
