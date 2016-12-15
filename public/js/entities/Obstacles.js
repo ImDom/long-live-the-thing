@@ -23,7 +23,7 @@ Obstacles.prototype = {
             "ground"
         );
 
-        this.sprite.body.velocity.x = -100;
+        this.sprite.body.velocity.x = -200;
         this.sprite.body.friction.y = 0;
         this.sprite.body.friction.x = 0;
         this.sprite.body.immovable = true;
