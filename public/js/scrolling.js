@@ -3,19 +3,19 @@ var game, socket;
 // global object with all game options
 var gameOptions = {
     // game width
-    gameWidth: 1500,
+    gameWidth: 800,
 
     // game height
-    gameHeight: 900,
+    gameHeight: 600,
 
     // width of each floor
-    floorWidth: 1500,
+    floorWidth: 800,
 
     // height of each floor
     floorHeight: 10,
 
     // array with vertical floors position
-    floorY: [440,890],
+    floorY: [300,590],
 
     // horizontal floor position
     floorX: 0,
