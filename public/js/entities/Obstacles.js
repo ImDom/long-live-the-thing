@@ -35,13 +35,7 @@ Obstacles = function() {
     this.blockGroup = game.add.group();
     this.killGroup = game.add.group();
 
-    var _this = this;
-    setInterval(function () {
-        //_this.addBlock();
-        if (!game.paused) {
-            _this.addPattern();
-        }
-    }, 45 * Math.abs(SPEED));
+    game.time.events.loop(4500, this.addPattern, this);
 };
 
 Obstacles.prototype = {
