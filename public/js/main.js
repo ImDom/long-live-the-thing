@@ -35,8 +35,8 @@ var playState = {
         this.level = new Level();
         this.ui = new UI();
         this.obstacles = new Obstacles();
-        this.runners = [];
-        this.ghosts = [];
+        this.runners = {};
+        this.ghosts = {};
 
         this.bindController();
 
@@ -154,9 +154,9 @@ var playState = {
     },
 
     removePlayer: function (id) {
-        if (this.runners.indexOf(id) > -1) {
-            delete this.runners[id]
-        } else if (this.ghosts.indexOf(id) > -1) {
+        if (this.runners[id]) {
+            delete this.runners[id];
+        } else if (this.ghosts[id]) {
             delete this.ghosts[id];
         }
     },
