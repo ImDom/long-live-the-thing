@@ -1,9 +1,8 @@
 function Player (id, game, gameOptions) {
     this.id = id;
     this.squareSize = 16,
-    this.squareSpeed = 170,
     this.squareGravity = 450;
-    this.jumpForce = -400;
+    this.jumpForce = -200;
     this.jumpTime = 500;
 
     this.runner = game.add.sprite(300, 600 - this.squareSize, "runner");
@@ -28,9 +27,11 @@ Player.prototype.update = function (groundGroup, fieldGroup) {
         this.runner.canJump = true;
         var _this = this;
         this.runner.body.velocity.x = 0;
+    } else {
+        this.runner.body.velocity.x = 0;
     }
 
-    if (this.runner.x < 0) {
+    if (this.runner.x < 0 || this.runner.x > 900) {
         this.runner.x = 300;
     } 
 }
@@ -38,11 +39,12 @@ Player.prototype.update = function (groundGroup, fieldGroup) {
 Player.prototype.jump = function () {
     // if the hero can jump...
     if (this.runner.canJump) {
-        // preventing it to jump while in the air
         this.runner.canJump = false;
 
-        // adding a vertical force to the player
+        this.runnerSpeedBeforeJump = this.runner.body.speed;
+        console.log(this.runnerSpeedBeforeJump);
+
         this.runner.body.velocity.y = this.jumpForce;
-        this.runner.body.velocity.x = 50;
+        
     }
 }

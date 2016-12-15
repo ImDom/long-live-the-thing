@@ -16,7 +16,7 @@ function Obstacle () {
         "ground"
     );
 
-    this.sprite.body.velocity.x = -170;
+    this.sprite.body.velocity.x = -60;
     this.sprite.body.friction.y = 0;
     this.sprite.body.friction.x = 0;
     this.sprite.body.immovable = true;
