@@ -1,16 +1,23 @@
 <!doctype html>
 <html lang='en'>
-  <head>
+<head>
     <meta charset='UTF-8' />
     <title>Phaser multiplayer game</title>
     <link type='text/css' rel='stylesheet' href='/style/reset.css' />
     <link type='text/css' rel='stylesheet' href='/style/game.css' />
     <script src='/js/vendor/phaser.min.js'></script>
     <script src='/socket.io/socket.io.js'></script>
-  </head>
-  <body>
 
-    <script src='/js/Player.js'></script>
-    <script src='/js/scrolling.js'></script>
-  </body>
+    <!-- Entities -->
+    <script src='/js/entities/Obstacles.js'></script>
+    <script src='/js/entities/Level.js'></script>
+    <script src='/js/entities/UI.js'></script>
+    <script src='/js/entities/Player.js'></script>
+
+    <!-- Game states -->
+    <script src='/js/main.js'></script>
+</head>
+<body>
+    <div id="game"></div>
+</body>
 </html>

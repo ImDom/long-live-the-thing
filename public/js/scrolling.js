@@ -75,8 +75,7 @@ var RunnerGame = {
         // Set the background color to blue
         game.stage.backgroundColor = gameOptions.backgroundColor;
 
-        // enabling ARCADE physics on the hero
-        game.physics.enable(this.theRunner, Phaser.Physics.ARCADE);
+
 
         // Add the physics engine to all game objects
         game.world.enableBody = true;
@@ -106,15 +105,7 @@ var RunnerGame = {
         this.groundGroup.add(floor);
         
 
-        // Bind controller
-        var _this = this;
-        socket.on("controller action", function (data) {
-            switch (data.action) {
-                case "jump":
-                    _this.squareJump();
-                    break;
-            }
-        });
+        
 
     },
 
