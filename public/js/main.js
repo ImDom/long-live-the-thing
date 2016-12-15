@@ -39,6 +39,8 @@ var playState = {
         this.ghosts = [];
 
         this.bindController();
+
+        this.showMenu();
     
         //game.sound.play('song');
     },
@@ -65,19 +67,20 @@ var playState = {
         if (game.paused) {
             this.menu.destroy();
             game.paused = false;
-            socket.emit("hide menu")
+            console.log("Start game")
+            socket.emit("start game");
         }
     },
 
     bindController: function () {
         // Bind controller
         var _this = this;
-        socket.on("new player", function () {
-            _this.newRunner(socket.id);
+        socket.on("new player", function (data) {
+            _this.newRunner(data.id);
         });
 
-        socket.on("remove player", function () {
-            _this.removePlayer(socket.id);
+        socket.on("remove player", function (data) {
+            _this.removePlayer(data.id);
         });
 
         socket.on("start game", function (data) {
@@ -87,19 +90,24 @@ var playState = {
         socket.on("controller action", function (data) {
             switch (data.action) {
                 case "jump":
-                    var player = _this.findRunner(socket.id);
+                    var player = _this.findRunner(data.id);
                     if (player) {
-                        game.paused = false;
                         player.jump();
                     }
                     break;
+
                 case "freeze":
                     var player = _this.findRandomRunner();
                     console.log("Random player", player)
                     if (player) {
                         player.freeze(gameOptions.freezeMs);
                     }
-                    
+                    break;
+
+                case "startGame":
+                    console.log("Hello")
+                    _this.startGame();
+                    break;
             }
         });
     },

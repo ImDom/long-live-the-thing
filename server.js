@@ -51,13 +51,15 @@ var setEventHandlers = function () {
 
 // New socket connection
 function onSocketGameConnection (client) {
-    util.log('Game client has connected: ' + client.id)
+    util.log('Game client has connected: ' + client.id);
+
+    client.on("start game", onGameStart);
 }
 
 function onSocketControllerConnection (client) {
     util.log('New player has connected: ' + client.id);
 
-    socketGame.emit('new player');
+    socketGame.emit('new player', { id: client.id });
 
     // Listen for client disconnected
     client.on('disconnect', onControllerDisconnect);
@@ -66,15 +68,25 @@ function onSocketControllerConnection (client) {
     client.on('controller action', onControllerAction);
 }
 
+function onGameStart () {
+    console.log("Game Start")
+    socketController.emit("start game");
+}
+
 // Socket client has disconnected
 function onControllerDisconnect () {
     util.log('Player has disconnected: ' + this.id);
 
-    socketGame.emit('remove player');
+    socketGame.emit('remove player', { id: this.id });
 }
 
 // Controller has triggered an action
 function onControllerAction (data) {
+    console.log("Controller action", data);
     // Broadcast updated position to connected socket clients
     socketGame.emit('controller action', {id: this.id, action: data.action});
+
+    if (data.action === "startGame") {
+        onGameStart();
+    }
 }

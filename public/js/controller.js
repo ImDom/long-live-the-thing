@@ -19,8 +19,23 @@ var actions = {
     freeze: function () {
       socket.emit('controller action', {action: 'freeze'});
       console.log('Freeze');
+    },
+
+    startGame: function () {
+        socket.emit('controller action', {action: 'startGame'});
+        console.log("Start game");
     }
 };
 
+socket.on("start game", function (data) {
+    console.log("Start le fucking game game")
+    document.getElementById('controller').style.display = "flex";
+    document.getElementById('menu').style.display = "none";
+});
+
+
 document.getElementById('jump').addEventListener("touchstart", actions.jump, false);
+document.getElementById('jump').addEventListener("click", actions.jump, false);
+document.getElementById('startGame').addEventListener("touchstart", actions.startGame, false);
+document.getElementById('startGame').addEventListener("click", actions.startGame, false);
 document.getElementById('freeze').addEventListener("touchstart", actions.freeze, false);

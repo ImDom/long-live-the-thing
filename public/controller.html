@@ -18,9 +18,13 @@
     <script src='/socket.io/socket.io.js'></script>
 </head>
 <body>
-    <div id="controller">
+    <div id="controller" class="container" style="display: none">
         <button id="jump">Jump</button>
         <button id="freeze">Freeze random player</button>
+    </div>
+
+    <div id="menu" class="container">
+        <button class="btn-start" id="startGame">Start game</button>
     </div>
     
     <script src='/js/controller.js'></script>
