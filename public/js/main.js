@@ -25,7 +25,7 @@ var playState = {
 
     create: function () {
         // Connect socket
-        socket = io.connect('/game', { query: "gameStarted=" + !game.paused });
+        socket = io.connect('/game');
 
         game.paused = true;
 
