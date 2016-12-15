@@ -5,7 +5,8 @@ var gameOptions = {
     height: 576,
     floorHeight: 10,
     gravity: 450,
-    runnerSpeed: 100
+    runnerSpeed: 100,
+    freezeMs: 3 * 1000
 };
 
 var playState = {
@@ -62,6 +63,13 @@ var playState = {
                         player.jump();
                     }
                     break;
+                case "freeze":
+                    var player = _this.findRandomRunner();
+                    console.log("Random player", player)
+                    if (player) {
+                        player.freeze(gameOptions.freezeMs);
+                    }
+                    
             }
         });
     },
@@ -80,6 +88,11 @@ var playState = {
 
     findRunner: function (id) {
         return this.runners[id];
+    },
+
+    findRandomRunner: function() {
+        var keys = Object.keys(this.runners)
+        return this.runners[keys[ keys.length * Math.random() << 0]];
     },
 
     newRunner: function (id) {
