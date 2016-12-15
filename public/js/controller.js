@@ -14,7 +14,9 @@ var actions = {
     },
 
     jump: function() {
-      socket.emit('jump');
+      socket.emit('controller action', {action: 'jump'});
       console.log('Jump');
     }
 };
+
+document.getElementById('jump').addEventListener("touchstart", actions.jump, false);

@@ -40,7 +40,7 @@ var gameOptions = {
 window.onload = function() {
     // game creation	
     game = new Phaser.Game(gameOptions.gameWidth, gameOptions.gameHeight);
-
+    
     // adding game state
     game.state.add("TheGame", TheGame);
 
@@ -111,10 +111,11 @@ TheGame.prototype = {
             this.groundGroup.add(floor);			
         }
 
+        var _this = this;
         socket.on("controller action", function (data) {
             switch (data.action) {
                 case "jump":
-                    this.squareJump();
+                    _this.squareJump();
                 break;
             }
         });
