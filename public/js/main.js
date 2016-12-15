@@ -148,7 +148,7 @@ var playState = {
         var runner = this.findRunner(id);
         if (runner) {
             console.log("this runner died:", runner);
-            this.ghosts.push(runner);
+            this.ghosts[id] = runner;
             delete this.runners[id];
         }
     },
