@@ -25,7 +25,7 @@ var playState = {
 
     create: function () {
         // Connect socket
-        socket = io.connect('/game', { query: "gameStarted=" + !game.paused });
+        socket = io.connect('/game');
 
         game.paused = true;
 
@@ -35,8 +35,8 @@ var playState = {
         this.level = new Level();
         this.ui = new UI();
         this.obstacles = new Obstacles();
-        this.runners = [];
-        this.ghosts = [];
+        this.runners = {};
+        this.ghosts = {};
 
         this.bindController();
 
@@ -148,15 +148,15 @@ var playState = {
         var runner = this.findRunner(id);
         if (runner) {
             console.log("this runner died:", runner);
-            this.ghosts.push(runner);
+            this.ghosts[id] = runner;
             delete this.runners[id];
         }
     },
 
     removePlayer: function (id) {
-        if (this.runners.indexOf(id) > -1) {
-            delete this.runners[id]
-        } else if (this.ghosts.indexOf(id) > -1) {
+        if (this.runners[id]) {
+            delete this.runners[id];
+        } else if (this.ghosts[id]) {
             delete this.ghosts[id];
         }
     },
