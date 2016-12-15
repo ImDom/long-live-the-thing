@@ -58,7 +58,7 @@ function onSocketGameConnection (client) {
 function onSocketControllerConnection (client) {
     util.log('New player has connected: ' + client.id);
 
-    socketGame.emit('new player', {id: client.id, playerColor: playerColors[controllerCount]});
+    socketGame.emit('new player', {id: client.id});
 
     // Listen for client disconnected
     client.on('disconnect', onControllerDisconnect);
