@@ -4,6 +4,7 @@ function preload() {
 
     game.load.image('sky', 'assets/sky.png');
     game.load.image('ground', 'assets/platform.png');
+    game.load.image('obstacle', 'assets/obstacle.png');
     game.load.image('star', 'assets/star.png');
     game.load.spritesheet('dude', 'assets/dude2.png', 32, 48);
 
@@ -40,12 +41,18 @@ function create() {
     //  This stops it from falling away when you jump on it
     ground.body.immovable = true;
 
-    //  Now let's create two ledges
-    var ledge = platforms.create(400, 400, 'ground');
-    ledge.body.immovable = true;
+    //  Obstacles
+    var ledge1 = platforms.create(100, game.world.height - 128, 'obstacle');
+    
+    ledge1.body.immovable = true;
 
-    ledge = platforms.create(-150, 250, 'ground');
-    ledge.body.immovable = true;
+    var ledge2 = platforms.create(300, game.world.height - (128 + 64), 'obstacle');
+    
+    ledge2.height = 128;
+    ledge2.body.immovable = true;
+
+    //ledge = platforms.create(-150, 250, 'ground');
+    //ledge.body.immovable = true;
 
     // The player and its settings
     player = game.add.sprite(32, game.world.height - 150, 'dude');
@@ -54,8 +61,8 @@ function create() {
     game.physics.arcade.enable(player);
 
     //  Player physics properties. Give the little guy a slight bounce.
-    player.body.bounce.y = 0.2;
-    player.body.gravity.y = 300;
+    player.body.bounce.y = 0.1;
+    player.body.gravity.y = 400;
     player.body.collideWorldBounds = true;
 
     //  Our two animations, walking left and right.
@@ -69,7 +76,7 @@ function create() {
     stars.enableBody = true;
 
     //  Here we'll create 12 of them evenly spaced apart
-    for (var i = 0; i < 12; i++)
+    for (var i = 0; i < 0; i++)
     {
         //  Create a star inside of the 'stars' group
         var star = stars.create(i * 70, 0, 'star');
