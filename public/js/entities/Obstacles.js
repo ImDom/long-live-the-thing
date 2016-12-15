@@ -1,7 +1,7 @@
 /**
  * Create an obstacle 
  */
-Obstacles = function(game) {
+Obstacles = function() {
     this.nextSpawnAt = 0;
 
     this.group = game.add.group();

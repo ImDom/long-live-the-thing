@@ -1,8 +1,7 @@
 /**
  * The game UI
  */
-UI = function(game) {
-    this.game = game;
+UI = function() {
 };
 
 UI.prototype = {

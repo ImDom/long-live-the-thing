@@ -6,11 +6,10 @@ Player = function(id) {
     this.size = 16;
     this.gravity = 450;
     this.jumpForce = -200;
-    this.jumpTime = 500;
     this.canJump = true;
     this.isDead = false;
 
-    this.runner = game.add.sprite(300, 600 - this.squareSize, "runner");
+    this.runner = game.add.sprite(300, 600 - this.size, "runner");
 
     this.runner.anchor.set(0.5);
     this.runner.width = this.size;
