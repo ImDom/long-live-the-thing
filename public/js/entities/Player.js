@@ -15,8 +15,6 @@ Player = function (id, runnerIndex, onDieCallback) {
     this.runner = game.add.sprite(300, game.world.height - this.size, "runnerSS");
     this.runner.animations.add('walk');
 
-    this.runner.animations.play('walk', 20, true);
-
     this.runner.tint = playerColors[runnerIndex];
     this.runner.anchor.set(0.5);
     this.runner.width = this.size;
@@ -46,7 +44,7 @@ Player.prototype = {
         if (this.runner.x < 0) {
             this.die();
         } else if (this.runner.x > game.world.width) {
-            this.runner.x = 300;
+            this.runner.x = game.world.width;
         }
 
         return this.isDead;
