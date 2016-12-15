@@ -51,7 +51,10 @@ var playState = {
         socket.on("controller action", function (data) {
             switch (data.action) {
                 case "jump":
-                    _this.findPlayer(data.id).jump();
+                    var player = _this.findPlayer(data.id);
+                    if (player) {
+                        player.jump();
+                    }
                     break;
             }
         });
@@ -68,7 +71,7 @@ var playState = {
         }
     },
 
-    findPlayer: function(id) {
+    findPlayer: function (id) {
         return this.players[id];
     },
 
