@@ -60,6 +60,12 @@ Player.prototype = {
         }
     },
 
+    freeze: function(milliSecs) {
+        var _this = this;
+        _this.canJump = false;
+        setTimeout(function() { _this.canJump = true; }, milliSecs)
+    },
+
     buildObstacle: function () {
         if (this.isDead) {
             // TODO
