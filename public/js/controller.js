@@ -32,7 +32,11 @@ socket.on("start game", function (data) {
     document.getElementById('menu').style.display = "none";
 });
 
-
 document.getElementById('jump').addEventListener("touchstart", actions.jump, false);
 document.getElementById('startGame').addEventListener("touchstart", actions.startGame, false);
 document.getElementById('freeze').addEventListener("touchstart", actions.freeze, false);
+
+
+document.getElementById('jump').addEventListener("mousedown", actions.jump, false);
+document.getElementById('startGame').addEventListener("mousedown", actions.startGame, false);
+document.getElementById('freeze').addEventListener("mousedown", actions.freeze, false);
