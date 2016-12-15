@@ -1,27 +1,27 @@
 var game, socket;
- 
+
 // global object with all game options
 var gameOptions = {
     // game width
-    gameWidth: 640,
+    gameWidth: 1500,
 
-    // game height 
-    gameHeight: 480,
+    // game height
+    gameHeight: 900,
 
     // width of each floor
-    floorWidth: 640,
+    floorWidth: 1500,
 
     // height of each floor
-    floorHeight: 20,
+    floorHeight: 10,
 
-    // array with vertical floors potision
-    floorY: [92,184,276,368,460],
+    // array with vertical floors position
+    floorY: [440,890],
 
     // horizontal floor position
     floorX: 0,
 
     // size of the hero
-    squareSize: 16,
+    squareSize: 24,
 
     // horizontal speed of the hero
     squareSpeed: 170,
@@ -33,73 +33,72 @@ var gameOptions = {
     jumpForce: -210,
 
     // jump tween length, in milliseconds
-    jumpTime: 500
+    jumpTime: 200,
+
+    // game background
+    backgroundColor: '#3598db'
 };
- 
-// when the window loads
-window.onload = function() {
-    // game creation	
-    game = new Phaser.Game(gameOptions.gameWidth, gameOptions.gameHeight);
-    
-    // adding game state
-    game.state.add("TheGame", TheGame);
 
-    // starting game state
-    game.state.start("TheGame");
-}
- 
-var TheGame = function(){};
- 
-TheGame.prototype = {
-    // when the state preloads
-    preload: function(){
-
-        // setting the game on maximum scale mode
-        game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+var RunnerGame = {
+    preload: function() {
         game.scale.pageAlignHorizontally = true;
-        game.scale.pageAlignVertically = true; 
+        game.scale.pageAlignVertically = true;
 
-        // preloading the only game assets, a tile which will be used both for the square and the floor
-        game.load.image("tile", "assets/tile.png");   
-    }, 
+        game.load.image("runner", "assets/runner.png");
+        game.load.image("ground", "assets/ground.png");
+    },
 
-    // once the state is ready
-    create: function(){
+    create: function() {
         socket = io.connect('/game');
 
         // creation of a group where we will place all floors
-        this.groundGroup = game.add.group();		
+        this.groundGroup = game.add.group();
 
         // we start on the first floor
         this.levelFloor = 0;
 
         // adding the hero on the first floor
-        this.theSquare = game.add.sprite(gameOptions.floorX + gameOptions.squareSize / 2, gameOptions.floorY[0] - gameOptions.squareSize / 2, "tile");
+        this.theRunner = game.add.sprite(
+            gameOptions.floorX + gameOptions.squareSize / 2,
+            gameOptions.floorY[0] - gameOptions.squareSize / 2,
+            "runner"
+        );
 
         // setting hero registration point
-        this.theSquare.anchor.set(0.5);
+        this.theRunner.anchor.set(0.5);
 
         // setting hero width and height
-        this.theSquare.width = gameOptions.squareSize;
-        this.theSquare.height = gameOptions.squareSize;
+        this.theRunner.width = gameOptions.squareSize;
+        this.theRunner.height = gameOptions.squareSize;
 
-        // chen the hero jump?
-        this.theSquare.canJump = true;
+        // can the hero jump?
+        this.theRunner.canJump = true;
+
+        // Set the background color to blue
+        game.stage.backgroundColor = gameOptions.backgroundColor;
 
         // enabling ARCADE physics on the hero
-        game.physics.enable(this.theSquare, Phaser.Physics.ARCADE);
+        game.physics.enable(this.theRunner, Phaser.Physics.ARCADE);
+
+        // Add the physics engine to all game objects
+        game.world.enableBody = true;
 
         // setting hero horizontal velocity
-        this.theSquare.body.velocity.x = gameOptions.squareSpeed;
+        this.theRunner.body.velocity.x = gameOptions.squareSpeed;
 
         // gravity applied to the square
-        this.theSquare.body.gravity.y = gameOptions.squareGravity;
+        this.theRunner.body.gravity.y = gameOptions.squareGravity;
 
         // time to create the floors
-        for(i = 0; i < gameOptions.floorY.length; i++){
-
+        for(var i = 0; i < gameOptions.floorY.length; i++){
             // each floor is a tile sprite
-            var floor = game.add.tileSprite(gameOptions.floorX, gameOptions.floorY[i], gameOptions.floorWidth, gameOptions.floorHeight, "tile");	
+            var floor = game.add.tileSprite(
+                gameOptions.floorX,
+                gameOptions.floorY[i],
+                gameOptions.floorWidth,
+                gameOptions.floorHeight,
+                "ground"
+            );
 
             // let's enable ARCADE physics on floors too
             game.physics.enable(floor, Phaser.Physics.ARCADE);
@@ -108,73 +107,91 @@ TheGame.prototype = {
             floor.body.immovable = true;
 
             // adding the floor to ground group
-            this.groundGroup.add(floor);			
+            this.groundGroup.add(floor);
         }
 
+        // Bind controller
         var _this = this;
         socket.on("controller action", function (data) {
             switch (data.action) {
                 case "jump":
                     _this.squareJump();
-                break;
+                    break;
             }
         });
     },
 
-    // at each frame
-    update: function () {
-        // making the hero collide with floors so it won't fallo down
-        game.physics.arcade.collide(this.theSquare, this.groundGroup);
+    update: function() {
+        // Here we update the game 60 times per second
+        // making the hero collide with floors so it won't fall down
+        game.physics.arcade.collide(this.theRunner, this.groundGroup);
 
         // if the hero leaves the floor to the right or to the left...
-        if ((this.theSquare.x > gameOptions.floorX + gameOptions.floorWidth && this.levelFloor % 2 == 0) || (this.theSquare.x < gameOptions.floorX && this.levelFloor % 2 == 1)){
+        if ((this.theRunner.x > gameOptions.floorX + gameOptions.floorWidth && this.levelFloor % 2 == 0) ||
+            (this.theRunner.x < gameOptions.floorX && this.levelFloor % 2 == 1))
+        {
 
             // increasing floor number or setting it back to zero
-            this.levelFloor = (this.levelFloor + 1) % gameOptions.floorY.length; 
+            this.levelFloor = (this.levelFloor + 1) % gameOptions.floorY.length;
 
             // adjusting hero speed according to floor number: from left to right on even floors, from right to left on odd floors
-            this.theSquare.body.velocity.x = (this.levelFloor % 2 == 0) ? gameOptions.squareSpeed : -gameOptions.squareSpeed; 
+            this.theRunner.body.velocity.x = (this.levelFloor % 2 == 0) ?
+                gameOptions.squareSpeed :
+                -gameOptions.squareSpeed;
 
             // no vertical velocity
-            this.theSquare.body.velocity.y = 0;
+            this.theRunner.body.velocity.y = 0;
 
-            // the hero can jump again 
-            this.theSquare.canjump = true; 
+            // the hero can jump again
+            this.theRunner.canjump = true;
 
             // adjusting hero vertical and horizontal position
-            this.theSquare.y = gameOptions.floorY[this.levelFloor] - gameOptions.squareSize / 2;
-            this.theSquare.x = (this.levelFloor % 2 == 0) ? gameOptions.floorX : gameOptions.floorX + gameOptions.floorWidth;   
+            this.theRunner.y = gameOptions.floorY[this.levelFloor] - gameOptions.squareSize / 2;
+            this.theRunner.x = (this.levelFloor % 2 == 0) ?
+                gameOptions.floorX :
+                gameOptions.floorX + gameOptions.floorWidth;
 
             // stopping the jump tween if running
             if (this.jumpTween && this.jumpTween.isRunning) {
                 this.jumpTween.stop();
-                this.theSquare.angle = 0;
-            }    
+                this.theRunner.angle = 0;
+            }
         }
 
         // if the hero as its feet on the ground, it can jump
-        if (this.theSquare.body.touching.down){
-            this.theSquare.canJump = true;
+        if (this.theRunner.body.touching.down){
+            this.theRunner.canJump = true;
         }
     },
 
-    // when the player jumps
     squareJump: function () {
         // if the hero can jump...
-        if (this.theSquare.canJump) {
+        if (this.theRunner.canJump) {
             // preventing it to jump while in the air
-            this.theSquare.canJump = false;
+            this.theRunner.canJump = false;
 
             // adding a vertical force to the player
-            this.theSquare.body.velocity.y = gameOptions.jumpForce;
+            this.theRunner.body.velocity.y = gameOptions.jumpForce;
 
             // setting a jump rotation angle just to make the square rotate
             var jumpAngle = this.levelFloor % 2 == 0 ? 90 : -90;
 
             // using a tween to rotate the player
-            this.jumpTween = game.add.tween(this.theSquare).to({
-                angle: this.theSquare.angle + jumpAngle
+            this.jumpTween = game.add.tween(this.theRunner).to({
+                angle: this.theRunner.angle + jumpAngle
             }, gameOptions.jumpTime, Phaser.Easing.Linear.None, true);
         }
-    }    
-}
+    }
+};
+
+// when the window loads
+window.onload = function() {
+    // game creation
+    game = new Phaser.Game(gameOptions.gameWidth, gameOptions.gameHeight);
+
+    // adding game state
+    game.state.add("RunnerGame", RunnerGame);
+
+    // starting game state
+    game.state.start("RunnerGame");
+};
