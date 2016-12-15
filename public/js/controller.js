@@ -14,7 +14,7 @@ var actions = {
     },
 
     jump: function() {
-      socket.emit('move player', { x: Math.min(Math.random() * 200), y: Math.min(Math.random() * 200), angle: 0 });
+      socket.emit('jump');
       console.log('Jump');
     }
 };
