@@ -28,6 +28,7 @@ var RunnerGame = {
 
         game.load.image("runner", "assets/runner.png");
         game.load.image("ground", "assets/ground.png");
+        game.load.audio("song", "assets/song.mp3");
     },
 
     create: function() {
@@ -79,6 +80,8 @@ var RunnerGame = {
                     break;
             }
         });
+
+        game.sound.play('song');
     },
 
     update: function() {
