@@ -1,4 +1,4 @@
-var socket = io();
+var socket = io.connect('/controller');
 
 var actions = {
     moveForward: function() {
