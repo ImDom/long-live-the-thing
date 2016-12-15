@@ -36,7 +36,7 @@ var gameOptions = {
     jumpTime: 200,
 
     // game background
-    backgroundColor: '#3598db'
+    backgroundColor: '#000'
 };
 
 var RunnerGame = {
