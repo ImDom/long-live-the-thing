@@ -62,6 +62,12 @@ var playState = {
                         player.jump();
                     }
                     break;
+                case "freeze":
+                    var player = _this.findRandomRunner();
+                    if (player) {
+                        player.freeze();
+                    }
+                    
             }
         });
     },
@@ -80,6 +86,11 @@ var playState = {
 
     findRunner: function (id) {
         return this.runners[id];
+    },
+
+    findRandomRunner: function() {
+        var keys = Object.keys(this.runners)
+        return obj[keys[ keys.length * Math.random() << 0]];
     },
 
     newRunner: function (id) {
