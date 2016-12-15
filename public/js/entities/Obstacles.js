@@ -29,12 +29,12 @@ Obstacles.prototype = {
             return;
         }
 
-        this.nextSpawnAt = game.time.now + 2000 - player.speed * 30;
+        this.nextSpawnAt = game.time.now + 2000 - gameOptions.runnerSpeed * 30;
         var newHazard = this.group.getFirstDead();
         var random = game.rnd.integerInRange(45, 485);
         if (newHazard) {
             newHazard.reset(random, -120);
-            newHazard.body.gravity.y = 400 + player.speed * 6;
+            newHazard.body.gravity.y = 400 + gameOptions.runnerSpeed * 6;
         }
     },
 
