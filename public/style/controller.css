@@ -48,11 +48,15 @@ body {
 
 input {
     font-family: 'Gotham', Arial;
+    color: #fff;
     font-size: 14px;
     text-align: center;
     text-transform: uppercase;
     border: 0 none;
-    letter-spacing: 1em;
+    letter-spacing: 0.1em;
+    -webkit-appearance: none;
+    border-radius: none;
+    background-color: transparent;
 }
 
 button {
@@ -72,9 +76,20 @@ button {
 }
 
 .btn-start {
-    background: green;
+    background: #4444ff;
 }
 
 button:active {
     opacity: .9;
+}
+
+.actionbar {
+    flex-grow: 0;
+    height: 10%;
+}
+
+.actionbar .action {
+    height: 100%;
+    width: 20%;
+    float: left;
 }
