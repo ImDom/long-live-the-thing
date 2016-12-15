@@ -2,7 +2,7 @@
   "name": "long-live-the-thing",
   "version": "1.0.0",
   "description": "Mp game",
-  "main": "lib/game.js",
+  "main": "lib/server.js",
   "scripts": {
     "start": "node .",
     "dev": "nodemon .",
