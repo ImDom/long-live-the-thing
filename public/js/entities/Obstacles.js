@@ -13,10 +13,33 @@ var patterns = [
         '____xx____',
         '_xxxxxxxx_',
         'xxxxxxxxx_'
+    ],
+    [
+        '________xx',
+        'xxxxx_____',
+        '________xx',
+        '__xxxxxxxx',
+        'xxxxxxxxxx'
+    ],
+    [
+        '_xxxxxxxx_',
+        '__________',
+        '__________',
+        '____xxxxxx',
+        '__xxxxxxxx',
+        'xxxxxxxxxx'
+    ],
+    [
+        '_xxxxxxxx_',
+        '__________',
+        '__________',
+        '__xxx____x',
+        '_______xxx',
+        'xxxxxx#xxx'
     ]
 ];
 
-var SPEED = -100;  // This speed has to work with Player jump force and gravity
+var SPEED = -120;  // This speed has to work with Player jump force and gravity
 
 /**
  * Generates obstacles
@@ -35,7 +58,7 @@ Obstacles = function() {
     this.blockGroup = game.add.group();
     this.killGroup = game.add.group();
 
-    game.time.events.loop(4500, this.addPattern, this);
+    game.time.events.loop(3750, this.addPattern, this);
 };
 
 Obstacles.prototype = {
@@ -55,6 +78,7 @@ Obstacles.prototype = {
 
             for (var colIndex = 0; colIndex < row.length; colIndex++) {
                 var part = row[colIndex];
+                var kill = false;
                 var sprite;
 
                 switch (part) {
@@ -65,6 +89,17 @@ Obstacles.prototype = {
                             45,
                             45,
                             "ground"
+                        );
+                        break;
+
+                    case "#":
+                        kill = true;
+                        sprite = game.add.tileSprite(
+                            game.world.width + (45 * colIndex),
+                            game.world.height - 10 - 45 - (45 * ((pattern.length - 1) - rowIndex)),
+                            45,
+                            45,
+                            "obstacle"
                         );
                         break;
 
@@ -79,7 +114,11 @@ Obstacles.prototype = {
                     sprite.body.friction.x = 0;
                     sprite.body.immovable = true;
 
-                    this.blockGroup.add(sprite);
+                    if (kill) {
+                        this.killGroup.add(sprite);
+                    } else {
+                        this.blockGroup.add(sprite);
+                    }
                 }
             }
         }

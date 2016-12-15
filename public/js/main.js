@@ -111,7 +111,10 @@ var playState = {
         var _this = this;
         socket.on("new player", function (data) {
             _this.newRunner(data.name);
-            _this.startCountdown();
+
+            if (game.paused) {
+                _this.startCountdown();
+            }
         });
 
         socket.on("remove player", function (data) {
