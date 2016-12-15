@@ -20,7 +20,6 @@ function Player (id, game, gameOptions) {
 }
 
 Player.prototype.update = function (groundGroup) {
-    console.log(this.runner, groundGroup)
     // Here we update the game 60 times per second
     // making the hero collide with floors so it won't fall down
     game.physics.arcade.collide(this.runner, groundGroup);

@@ -57,11 +57,10 @@ function onSocketGameConnection (client) {
 function onSocketControllerConnection (client) {
     util.log('New player has connected: ' + client.id);
 
+    socketGame.emit('new player', {id: client.id});
+
     // Listen for client disconnected
     client.on('disconnect', onControllerDisconnect);
-
-    // Listen for new player message
-    client.on('new player', onNewPlayer);
 
     // Listen for move player message
     client.on('controller action', onControllerAction);
@@ -72,11 +71,6 @@ function onControllerDisconnect () {
     util.log('Player has disconnected: ' + this.id);
 
     socketGame.emit('remove player', {id: this.id});
-}
-
-// New controller has connected, creating one new player
-function onNewPlayer (data) {
-    socketGame.emit('new player', {id: this.id})
 }
 
 // Controller has triggered an action
