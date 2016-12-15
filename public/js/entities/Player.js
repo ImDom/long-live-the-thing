@@ -32,7 +32,8 @@ Player.prototype = {
         // if the hero as its feet on the ground, it can jump
         if (this.runner.body.touching.down) {
             this.canJump = true;
-            this.runner.body.velocity.x = 0;
+            this.runner.body.velocity.x = 10;
+            this.runner.animations.play('walk', 20, true);
         } else {
             this.runner.body.velocity.x = 0;
         }
@@ -55,6 +56,7 @@ Player.prototype = {
     jump: function () {
         if (this.canJump) {
             this.canJump = false;
+            this.runner.animations.stop('walk');
             this.runnerSpeedBeforeJump = this.runner.body.speed;
 
             this.runner.body.velocity.y = this.jumpForce;
