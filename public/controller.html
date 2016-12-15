@@ -2,16 +2,23 @@
 <html lang='en'>
 <head>
     <meta charset='UTF-8' />
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
     <title>Long Live The Thing - Controller</title>
     <link type='text/css' rel='stylesheet' href='/style/reset.css' />
     <link type='text/css' rel='stylesheet' href='/style/controller.css' />
+    <script src='/js/vendor/fastclick.js'></script>
+    <script>
+        if ('addEventListener' in document) {
+            document.addEventListener('DOMContentLoaded', function() {
+                FastClick.attach(document.body);
+            }, false);
+        }
+    </script>
     <script src='/socket.io/socket.io.js'></script>
     <script src='/js/controller.js'></script>
 </head>
 <body>
     <div id="controller">
-        <button onclick="actions.moveForward()">Move Forward</button>
-        <button onclick="actions.moveBackward()">Move Backward</button>
         <button onclick="actions.jump()">Jump</button>
     </div>
 </body>
