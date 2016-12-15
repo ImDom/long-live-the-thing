@@ -14,15 +14,12 @@ var gameOptions = {
     // height of each floor
     floorHeight: 10,
 
-<<<<<<< HEAD
-=======
     // array with vertical floors position
     floorY: [300,590],
 
     // horizontal floor position
     floorX: 0,
 
->>>>>>> eddee7e9a11934a47bd59a0b1bc345efc60fb2cd
     // size of the hero
     squareSize: 24,
 
