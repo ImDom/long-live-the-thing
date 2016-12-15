@@ -14,9 +14,6 @@ var gameOptions = {
     // height of each floor
     floorHeight: 10,
 
-    // array with vertical floors position
-    floorY: [290,590],
-
     // horizontal floor position
     floorX: 0,
 
@@ -38,6 +35,7 @@ var RunnerGame = {
 
         // creation of a group where we will place all floors
         this.groundGroup = game.add.group();
+        this.Field = new Field(game);
 
         // adding the hero on the first floor
         this.players = [];
@@ -46,25 +44,23 @@ var RunnerGame = {
         game.world.enableBody = true;
 
         // time to create the floors
-        for(var i = 0; i < gameOptions.floorY.length; i++){
-            // each floor is a tile sprite
-            var floor = game.add.tileSprite(
-                gameOptions.floorX,
-                gameOptions.floorY[i],
-                gameOptions.floorWidth,
-                gameOptions.floorHeight,
-                "ground"
-            );
+        // each floor is a tile sprite
+        var floor = game.add.tileSprite(
+            gameOptions.floorX,
+            600 - gameOptions.floorHeight,
+            gameOptions.floorWidth,
+            gameOptions.floorHeight,
+            "ground"
+        );
 
-            // let's enable ARCADE physics on floors too
-            game.physics.enable(floor, Phaser.Physics.ARCADE);
+        // let's enable ARCADE physics on floors too
+        game.physics.enable(floor, Phaser.Physics.ARCADE);
 
-            // floors can't move
-            floor.body.immovable = true;
+        // floors can't move
+        floor.body.immovable = true;
 
-            // adding the floor to ground group
-            this.groundGroup.add(floor);
-        }
+        // adding the floor to ground group
+        this.groundGroup.add(floor);
 
         // Bind controller
         var _this = this;
@@ -77,7 +73,6 @@ var RunnerGame = {
         });
 
         socket.on("controller action", function (data) {
-            console.log("controller action", data);
             switch (data.action) {
                 case "jump":
                     _this.findPlayer(data.id).jump();
@@ -90,12 +85,11 @@ var RunnerGame = {
         _this = this;
         for (var id in this.players) {
             var player = this.players[id];
-            player.update(_this.groundGroup);
+            player.update(_this.groundGroup, _this.Field.fieldGroup);
         }
     },
 
     findPlayer: function(id) {
-        console.log(id, this.players[id])
         return this.players[id];
     },
 
