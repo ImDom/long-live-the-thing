@@ -19,7 +19,7 @@ var socketController;
 
 // Create and start the http server
 var server = http.createServer(
-    ecstatic({ root: path.resolve(__dirname, '../public') })
+    ecstatic({ root: path.resolve(__dirname, './public') })
 ).listen(port, function (err) {
     if (err) {
       throw err;
