@@ -24,16 +24,14 @@ var playState = {
         // Connect socket
         socket = io.connect('/game');
 
-        this.level = new Level();
-        this.level.create();
-        this.ui = new UI();
-        this.ui.create();
-        this.obstacles = new Obstacles();
-        this.obstacles.create();
-        this.players = [];
-
+        game.paused = true;
         // Add the physics engine to all game objects
         game.world.enableBody = true;
+
+        this.level = new Level();
+        this.ui = new UI();
+        this.obstacles = new Obstacles();
+        this.players = [];
 
         this.bindController();
 

@@ -22,10 +22,6 @@ Obstacles = function() {
 };
 
 Obstacles.prototype = {
-    create: function () {
-
-    },
-
     update: function () {},
 
     spawn: function () {
