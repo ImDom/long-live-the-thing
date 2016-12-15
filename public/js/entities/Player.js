@@ -32,9 +32,18 @@ Player.prototype = {
             this.runner.body.velocity.x = 0;
         }
 
-        if (this.runner.x < 0 || this.runner.x > 900) {
+        if (this.runner.x < 0) {
+            this.die();
+        }
+
+        if (this.runner.x > 900) {
             this.runner.x = 300;
         }
+    },
+
+    die: function () {
+        this.isDead = true;
+        this.runner.kill();
     },
 
     jump: function () {
@@ -51,11 +60,6 @@ Player.prototype = {
         if (this.isDead) {
             // TODO
         }
-    },
-
-    onHit: function () {
-        // DIE
-        this.isDead = true;
     }
 };
 
