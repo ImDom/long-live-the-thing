@@ -25,6 +25,8 @@ var playState = {
         // Connect socket
         socket = io.connect('/game');
 
+        game.paused = true;
+
         // Add the physics engine to all game objects
         game.world.enableBody = true;
 
@@ -52,6 +54,8 @@ var playState = {
         socket.on("controller action", function (data) {
             switch (data.action) {
                 case "jump":
+                    game.paused = false;
+                
                     var player = _this.findPlayer(data.id);
                     if (player) {
                         player.jump();
