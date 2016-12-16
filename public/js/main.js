@@ -24,7 +24,10 @@ var playState = {
         game.load.image("ground", "assets/ground.png");
         game.load.image("cloud", "assets/cloud.png");
         game.load.audio("music", "assets/song.mp3");
-        game.load.audio("jump", "assets/jump.wav");
+        game.load.audio("jump1", "assets/jump1.wav");
+        game.load.audio("jump2", "assets/jump2.wav");
+        game.load.audio("jump3", "assets/jump3.wav");
+        game.load.audio("jump4", "assets/jump4.wav");
     },
 
     create: function () {
@@ -42,7 +45,7 @@ var playState = {
         this.ghosts = {};
 
         this.music = game.add.audio("music");
-        this.music.volume = 0.05;
+        this.music.volume = 0.2;
 
         this.bindController();
 
