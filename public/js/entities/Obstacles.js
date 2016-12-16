@@ -1,45 +1,35 @@
 var patterns = [
     [
-        '#xxx_x_xx_'
+        'xxxx_x_xx_xxxx_x_xx_xxxx'
     ],
     [
-        'x__x#__xx_'
+        'x__xx_xxx_xxxxx_xxx__xxx'
     ],
     [
-        '__xx__x___',
-        'xxxxxxxxx_'
+        '__xx__x_x_xxxxx__xxx____',
+        '__________xxxxx______xxx',
+        '______x__________xxx_xxx',
+        'xxxxxxx_xxxxxxxxxxxxxxx_'
     ],
     [
-        '____xx____',
-        '_xxxxxx#x_',
-        'xxxxxxxxx_'
+        '____xx____xxxxx__xxxxxxx',
+        '_xxxxxxxxx______________',
+        'xxxxxxxxx_xxxxxxxxxxxxxx'
     ],
     [
-        '________xx',
-        'xxxxx#x___',
-        '________xx',
-        '__xx#xxxxx',
-        'xxxxxxxxxx'
-    ],
-    [
-        '_xxxxxxxx_',
-        '__________',
-        '__________',
-        '____xxx#x#',
-        '__xxxxxxxx',
-        'xxxxxxxxxx'
-    ],
-    [
-        '_xxxxxxxx_',
-        '__________',
-        '__________',
-        '__xxx____x',
-        '_______xxx',
-        'xxxxxx#xxx'
+        '________xxxxxxx__xxx__xx',
+        '_xxxxxx_________________',
+        '________xx______________',
+        '__xxxxxxxx__xxxxxxx_____',
+        'xxxxxxxxxxxxxxxxxxxxx__x'
     ]
 ];
 
-var SPEED = -120;  // This speed has to work with Player jump force and gravity
+// 3 blocks (45px wide) per second
+var SPEED = -(45 * 3);  // This speed has to work with Player jump force and gravity
+
+var BLOCK_SIZE = 45;
+var PATTERN_LENGTH = 24;
 
 /**
  * Generates obstacles
@@ -58,7 +48,7 @@ Obstacles = function() {
     this.blockGroup = game.add.group();
     this.killGroup = game.add.group();
 
-    game.time.events.loop(3750, this.addPattern, this);
+    game.time.events.loop(((BLOCK_SIZE * PATTERN_LENGTH) / Math.abs(SPEED)) * 1000, this.addPattern, this);
 };
 
 Obstacles.prototype = {
@@ -72,8 +62,8 @@ Obstacles.prototype = {
         for (var rowIndex = 0; rowIndex < pattern.length; rowIndex++) {
             var row = pattern[rowIndex];
 
-            if (row.length !== 10) {
-                throw new Error("Row length has to be 10!");
+            if (row.length !== PATTERN_LENGTH) {
+                throw new Error("Row length has to be " + PATTERN_LENGTH);
             }
 
             for (var colIndex = 0; colIndex < row.length; colIndex++) {
@@ -85,20 +75,20 @@ Obstacles.prototype = {
                     case "x":
                         sprite = game.add.tileSprite(
                             game.world.width + (45 * colIndex),
-                            game.world.height - 10 - 45 - (45 * ((pattern.length - 1) - rowIndex)),
-                            45,
-                            45,
-                            "ground"
+                            game.world.height - 10 - BLOCK_SIZE - (BLOCK_SIZE * ((pattern.length - 1) - rowIndex)),
+                            BLOCK_SIZE,
+                            BLOCK_SIZE,
+                            "obstacle"
                         );
                         break;
 
                     case "#":
                         kill = true;
                         sprite = game.add.tileSprite(
-                            game.world.width + (45 * colIndex),
-                            game.world.height - 10 - 45 - (45 * ((pattern.length - 1) - rowIndex)),
-                            45,
-                            45,
+                            game.world.width + (BLOCK_SIZE * colIndex),
+                            game.world.height - 10 - BLOCK_SIZE - (BLOCK_SIZE * ((pattern.length - 1) - rowIndex)),
+                            BLOCK_SIZE,
+                            BLOCK_SIZE,
                             "danger"
                         );
                         break;
