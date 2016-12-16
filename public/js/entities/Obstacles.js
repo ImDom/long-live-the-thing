@@ -30,7 +30,13 @@ Obstacles = function() {
 };
 
 Obstacles.prototype = {
-    update: function () {},
+    update: function () {
+        this.blockGroup.forEachAlive(function (s) {
+            if (s.x < -45) {
+                s.destroy();
+            }
+        });
+    },
 
     addInitialBlocks: function () {
         for (var i = 0; i < 48; i++) {
