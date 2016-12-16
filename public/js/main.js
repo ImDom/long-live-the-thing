@@ -1,4 +1,4 @@
-var SP = false;
+var SP = true;
 var game, socket, socketController;
 
 var gameOptions = {
@@ -42,7 +42,7 @@ var playState = {
         this.ghosts = {};
 
         this.music = game.add.audio("music");
-        this.music.volume = 0;
+        this.music.volume = 0.05;
 
         this.bindController();
 
@@ -138,12 +138,14 @@ var playState = {
         // Bind controller
         var _this = this;
         socket.on("new player", function (data) {
-            _this.newRunner(data.name, data.id);
+            if (!this.gameStarted) {
+                _this.newRunner(data.name, data.id);
 
-            _this.updateNumPlayersText();
+                _this.updateNumPlayersText();
 
-            if (game.paused && !this.gameStarted) {
-                _this.startCountdown();
+                if (game.paused) {
+                    _this.startCountdown();
+                }
             }
         });
 
