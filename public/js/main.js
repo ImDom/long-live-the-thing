@@ -25,11 +25,9 @@ var playState = {
     },
 
     create: function () {
-        console.log("Create again?")
+        console.log("Create again?");
         // Connect socket
         socket = io.connect('/game');
-
-        game.paused = true;
 
         // Add the physics engine to all game objects
         game.world.enableBody = true;
@@ -40,18 +38,27 @@ var playState = {
         this.runners = {};
         this.ghosts = {};
 
+        this.music = game.add.audio("music");
+        this.music.volume = 0.05;
+
         this.bindController();
 
+        this.pauseGame();
         this.showMenu();
-        var music = game.add.audio("music");
-        music.loopFull();
-        music.volume = 0.05;
 
         this.gameOver = false;
+
+        // TODO remove !!
+        game.sound.mute = true;
+    },
+
+    pauseGame: function () {
+        this.music.stop();
+        game.paused = true;
     },
 
     showMenu: function () {
-        game.paused = true;
+        this.pauseGame();
         this.menu = game.add.text(
             game.world.width/2, 
             game.world.height/2, 
@@ -105,6 +112,7 @@ var playState = {
     startGame: function () {
         if (game.paused) {
             game.paused = false;
+            this.music.play();
             socket.emit("start game");
         }
     },
@@ -206,13 +214,13 @@ var playState = {
     },
 
     updateNumPlayersText: function () {
-        this.numPlayers.setText(Object.keys(this.players).length + " players connected");
+        this.numPlayers.setText(Object.keys(this.runners).length + " players connected");
     },
 
     checkState: function () {
         if (Object.keys(this.runners).length === 1) {
             // TODO - All runners except for one are dead
-            game.paused = true;
+            this.pauseGame();
             this.endGame();
         }
     },
@@ -223,7 +231,7 @@ var playState = {
             return b.time - a.time;
         });
 
-        var numGhosts = ghosts.length
+        var numGhosts = ghosts.length;
         var numListGhosts = numGhosts > 5 ? 5 : numGhosts;
         
         // Show winner name
@@ -235,7 +243,7 @@ var playState = {
         );
         this.winnerText.anchor.setTo(0.5, 0.5);
         // Show rank list
-            var rankList = "1. " + winner.id
+            var rankList = "1. " + winner.id;
             for (var i = 0; i < numGhosts; ++i) {
                 rankList += "\n" + (i+2) + ". " + ghosts[i].id;
             }
@@ -252,8 +260,10 @@ var playState = {
 
         this.gameOver = true;
 
+        var _this = this;
         setTimeout(function () {
             game.paused = false;
+            _this.music.play();
             game.state.restart();
             socket.emit("end game");
         }, 5000);
