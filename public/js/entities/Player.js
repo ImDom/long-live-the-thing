@@ -11,7 +11,7 @@ Player = function (id, socketId, runnerIndex, onDieCallback) {
     this.isDead = false;
     this.isFrozen = false;
     this.onDieCallback = onDieCallback;
-    this.color = playerColors[runnerIndex];
+    this.color = runnerIndex < playerColors.length ? playerColors[runnerIndex] : Math.random() * 0xffffff;
 
     //this.runner = game.add.sprite(300, game.world.height - this.size, "runner");
     this.runner = game.add.sprite(game.world.width / 2, game.world.height / 1.5, "runnerSS");
@@ -73,7 +73,7 @@ Player.prototype = {
     },
 
     freeze: function(milliSecs, freezerId) {
-        console.log("freezing ", milliSecs, freezerId)
+        console.log("freezing ", milliSecs, freezerId);
         var _this = this;
         
         var popUp = game.add.text(

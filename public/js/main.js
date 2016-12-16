@@ -205,7 +205,7 @@ var playState = {
         if (!game.paused) { return; }
 
         var runnerIndex = Object.keys(this.runners).length;
-        if (!this.runners[id] && !this.ghosts[id] && runnerIndex < playerColors.length) {
+        if (!this.runners[id] && !this.ghosts[id]) {
             var player = new Player(
                 id,
                 socketId,
