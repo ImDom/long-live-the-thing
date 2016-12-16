@@ -219,7 +219,7 @@ var playState = {
     endGame: function (winner) {
         var winner = this.runners[Object.keys(this.runners)[0]];
         var ghosts = Object.values(this.ghosts).sort(function(a, b) {
-            return a.time - b.time;
+            return b.time - a.time;
         });
 
         var numGhosts = ghosts.length
