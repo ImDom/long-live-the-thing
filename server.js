@@ -15,6 +15,7 @@ var socket;
 var socketGame;
 var socketController;
 var gameStarted;
+var timer;
 
 /* ************************************************
 ** GAME INITIALISATION
@@ -54,7 +55,7 @@ var setEventHandlers = function () {
 
 // New socket connection
 function onSocketGameConnection (client) {
-    util.log('Game client has connected: ' + client.id);
+   // util.log('Game client has connected: ' + client.id);
 
     client.on("start game", onGameStart);
     client.on("end game", onGameEnd);
@@ -63,8 +64,12 @@ function onSocketGameConnection (client) {
 }
 
 function onSocketControllerConnection (client) {
-    currentPlayerIds.push(client.id);
-    util.log('New player has connected: ' + client.id);
+  //  console.log(client.handshake.query)
+    if (client.handshake.query.fromGame !== "true") {
+     //   console.log("Add player", client.id)
+        currentPlayerIds.push(client.id);
+    }
+   // util.log('New player has connected: ' + client.id);
 
     // Listen for client disconnected
     client.on('disconnect', onControllerDisconnect);
@@ -77,29 +82,33 @@ function onSocketControllerConnection (client) {
     client.on('color', function (data) {
         client.to(data.socketId).emit("color", data.color)
     });
-
-    setInterval(function () {
-        if (!gameStarted) { return; }
-        client.to(findRandomPlayerId()).emit("powerUp", { type: "freeze" });
-        socketGame.emit("powerUp", { id: client.id });
-    }, 10 * 1000);
 }
 
 function findRandomPlayerId() {
+    //console.log("findRandomPlayerId", currentPlayerIds)
     return currentPlayerIds[Math.floor(Math.random() * currentPlayerIds.length)];
 }
 
 function onGameStart () {
-    console.log("Game Start")
+   // console.log("Game Start")
     socketController.emit("start game");
     gameStarted = true;
+
+    timer = setInterval(function () {
+        var randomPlayer = findRandomPlayerId();
+        console.log("Give power up", randomPlayer);
+        socketController.to(randomPlayer).emit("powerUp", { type: "freeze" });
+        socketGame.emit("powerUp", { id: randomPlayer });
+    }, 5 * 1000);
 }
 
 function onGameEnd () {
     currentPlayerIds = [];
-    console.log("Game End");
+  //  console.log("Game End");
     socketController.emit("end game");
     gameStarted = false;
+
+    clearInterval(timer);
 }
 
 function onControllerReady (data) {
@@ -110,13 +119,17 @@ function onControllerReady (data) {
 
 // Socket client has disconnected
 function onControllerDisconnect () {
-    util.log('Player has disconnected: ' + this.id);
+    //util.log('Player has disconnected: ' + this.id);
 
     socketGame.emit('remove player', { id: this.id, name: this.controllerName });
 
+    _this = this;
     currentPlayerIds = currentPlayerIds.filter(function (id) {
-        return id !== this.id;
+       // console.log(id, _this.id)
+        return id !== _this.id;
     });
+
+   // console.log(currentPlayerIds);
 }
 
 // Controller has triggered an action

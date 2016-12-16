@@ -34,7 +34,7 @@ var playState = {
     create: function () {
         // Connect socket
         socket = io.connect('/game');
-        socketController = io.connect('/controller');
+        socketController = io.connect('/controller', { query: "fromGame=true" });
 
         // Add the physics engine to all game objects
         game.world.enableBody = true;
@@ -136,8 +136,8 @@ var playState = {
     },
 
     restartGame: function () {
-        game.state.restart();
         socket.emit("end game");
+        window.location.reload();
     },
 
     bindController: function () {
@@ -185,6 +185,24 @@ var playState = {
                     break;
             }
         });
+
+        socket.on("powerUp", function (data) {
+            if (game.paused) { return; }
+
+            this.powerUpText = game.add.text(
+                game.world.width/2,
+                50,
+                "Someone got a freeze power up!",
+                { font: '20px Arial', fill: '#fff' }
+            );
+            this.powerUpText.anchor.setTo(0.5, 0.5);
+
+            var _this = this;
+            setTimeout(function () {
+                _this.powerUpText.destroy();
+                _this.powerUpText = undefined;
+            }, 2500)
+        })
     },
 
     update: function () {
