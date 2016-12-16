@@ -46,6 +46,10 @@ socket.on('powerUp', function(data) {
 socket.on('color', function(data) {
     var color = data.toString(16);
 
+    var str = "" + color;
+    var pad = "000000";
+    color = pad.substring(0, pad.length - str.length) + str;
+
     document.getElementById('jump').style.backgroundColor = "#" + color;
 });
 
