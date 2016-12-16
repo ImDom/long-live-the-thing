@@ -44,7 +44,7 @@ document.getElementById("name").value = window.localStorage.getItem("name");
 
 document.getElementById('jump').addEventListener("touchstart", actions.jump, false);
 document.getElementById('ready').addEventListener("touchend", actions.ready, false);
-document.getElementById('freeze').addEventListener("touchstart", actions.freeze, false);
+document.getElementById('freeze').addEventListener("touchend", actions.freeze, false);
 
 document.getElementById('jump').addEventListener("mousedown", actions.jump, false);
 document.getElementById('ready').addEventListener("mousedown", actions.ready, false);
