@@ -8,7 +8,7 @@ var patterns = [
     [
         '__xx__x_x_xxxxx__xxx____',
         '__________xxxxx______xxx',
-        '______x__________xxx_xxx',
+        '______x__________xxxxxxx',
         'xxxxxxx_xxxxxxxxxxxxxxx_'
     ],
     [
@@ -18,7 +18,7 @@ var patterns = [
     ],
     [
         '________xxxxxxx__xxx__xx',
-        '_xxxxxx_________________',
+        'xxxxxxx_________________',
         '________xx______________',
         '__xxxxxxxx__xxxxxxx_____',
         'xxxxxxxxxxxxxxxxxxxxx__x'
