@@ -31,7 +31,7 @@ Obstacles = function() {
 
 Obstacles.prototype = {
     update: function () {
-        this.blockGroup.forEachAlive(function (s) {
+        this.blockGroup.forEach(function (s) {
             if (s.x < -45) {
                 s.destroy();
             }
