@@ -24,6 +24,7 @@ var playState = {
         game.load.image("ground", "assets/ground.png");
         game.load.image("cloud", "assets/cloud.png");
         game.load.audio("music", "assets/song.mp3");
+        game.load.audio("cheers", "assets/applause.wav");
         game.load.audio("jump1", "assets/jump1.wav");
         game.load.audio("jump2", "assets/jump2.wav");
         game.load.audio("jump3", "assets/jump3.wav");
@@ -46,6 +47,9 @@ var playState = {
 
         this.music = game.add.audio("music");
         this.music.volume = 0.2;
+
+        this.cheers = game.add.audio("cheers");
+        this.cheers.volume = 0.5;
 
         this.bindController();
 
@@ -202,16 +206,18 @@ var playState = {
     },
 
     update: function () {
-        this.level.update();
-        this.obstacles.update();
-        this.ui.update();
+        if (!this.gameOver) {
+            this.level.update();
+            this.obstacles.update();
+            this.ui.update();
 
-        for (var id in this.runners) {
-            var player = this.runners[id];
-            player.update(this.obstacles.blockGroup, this.obstacles.killGroup, this.level.group);
+            for (var id in this.runners) {
+                var player = this.runners[id];
+                player.update(this.obstacles.blockGroup, this.obstacles.killGroup, this.level.group);
+            }
+
+            this.checkState();
         }
-
-        this.checkState();
     },
 
     findRunner: function (id) {
@@ -259,6 +265,7 @@ var playState = {
                 { font: '20px Arial', fill: '#fff' }
             );
             this.runnerDiedText.anchor.setTo(0.5, 0.5);
+            this.runnerDiedText.body.velocity.y = -5;
 
             runner.time = new Date().getTime();
             this.ghosts[id] = runner;
@@ -281,12 +288,16 @@ var playState = {
     checkState: function () {
         if (Object.keys(this.runners).length <= (SP ? 0 : 1)) {
             // TODO - All runners except for one are dead
-            this.pauseGame();
             this.endGame();
         }
     },
 
     endGame: function (winner) {
+        this.gameOver = true;
+        this.obstacles.clear();
+        this.music.volume = 0.1;
+        this.cheers.play();
+
         // It can happen that everyone died at the same time
         var winnerIndex = Object.keys(this.runners)[0];
         var winner;
@@ -318,6 +329,7 @@ var playState = {
             { font: '30px Arial', fill: '#fff' }
         );
         this.winnerText.anchor.setTo(0.5, 0.5);
+        this.winnerText.body.velocity.y = -5;
 
         // Show rank list
         var rankList = "";

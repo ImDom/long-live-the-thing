@@ -22,7 +22,11 @@ Obstacles = function() {
     this.killGroup = game.add.group();
 
     this.addInitialBlocks();
-    game.time.events.loop(((BLOCK_SIZE * PATTERN_LENGTH) / Math.abs(SPEED)) * 1000, this.addPattern, this);
+    this.buildEvent = game.time.events.loop(
+        ((BLOCK_SIZE * PATTERN_LENGTH) / Math.abs(SPEED)) * 1000,
+        this.addPattern,
+        this
+    );
 };
 
 Obstacles.prototype = {
@@ -100,5 +104,9 @@ Obstacles.prototype = {
                 }
             }
         }
+    },
+
+    clear: function () {
+        game.time.events.remove(this.buildEvent);
     }
 };
