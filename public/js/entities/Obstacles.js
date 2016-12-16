@@ -1,5 +1,5 @@
 // 3 blocks (45px wide) per second
-var SPEED = -(45 * 3);  // This speed has to work with Player jump force and gravity
+var SPEED = -(45 * 4);  // This speed has to work with Player jump force and gravity
 
 var BLOCK_SIZE = 45;
 var PATTERN_LENGTH = 24;
