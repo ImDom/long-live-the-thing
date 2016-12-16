@@ -7,14 +7,14 @@ var patterns = [
     ],
     [
         '__xx__x_x_xxxxx__xxx____',
-        '__________xxxxx______xxx',
+        '_____________________xxx',
         '______x__________xxxxxxx',
         'xxxxxxx_xxxxxxxxxxxxxxx_'
     ],
     [
         '____xx____xxxxx__xxxxxxx',
         '_xxxxxxxxx______________',
-        'xxxxxxxxx_xxxxxxxxxxxxxx'
+        'x_______________xxxxxxxx'
     ],
     [
         '________xxxxxxx__xxx__xx',
