@@ -75,7 +75,7 @@ Player.prototype = {
         var popUp = game.add.text(
             game.world.width/2, 
             game.world.height/2, 
-            freezerId + " froze " + this.id + " for " + Math.min(milliSecs / 1000) + "!", 
+            freezerId + " froze " + this.id + " for " + Math.min(milliSecs / 1000) + " seconds!", 
             { font: '30px Arial', fill: '#fff' }
         );
         popUp.anchor.setTo(0.5, 0.5);

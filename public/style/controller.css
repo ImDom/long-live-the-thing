@@ -85,7 +85,7 @@ button:active {
 
 .actionbar {
     flex-grow: 0;
-    height: 15%;
+    height: 20%;
 }
 
 .actionbar .action {

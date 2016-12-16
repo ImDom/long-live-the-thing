@@ -45,7 +45,6 @@ var playState = {
 
         this.pauseGame();
         this.showMenu();
-
         this.gameOver = false;
     },
 
@@ -75,7 +74,7 @@ var playState = {
     startCountdown: function () {
         var time = 10;
 
-        if (this.countdownInterval || Object.keys(this.runners).length < 1) {
+        if (this.countdownInterval || Object.keys(this.runners).length < 2) {
             return;
         }
         
@@ -150,7 +149,7 @@ var playState = {
                     var player = _this.findRandomRunner();
                     console.log("Random player", player)
                     if (player) {
-                        player.freeze(data.id, gameOptions.freezeMs);
+                        player.freeze(gameOptions.freezeMs, data.id);
                     }
                     break;
             }
@@ -215,6 +214,7 @@ var playState = {
     },
 
     checkState: function () {
+
         if (Object.keys(this.runners).length === 1) {
             // TODO - All runners except for one are dead
             this.pauseGame();
@@ -239,23 +239,20 @@ var playState = {
             { font: '30px Arial', fill: '#fff' }
         );
         this.winnerText.anchor.setTo(0.5, 0.5);
+
         // Show rank list
-            var rankList = "1. " + winner.id;
-            for (var i = 0; i < numGhosts; ++i) {
-                rankList += "\n" + (i+2) + ". " + ghosts[i].id;
-            }
+        var rankList = "1. " + winner.id
+        for (var i = 0; i < numGhosts; ++i) {
+            rankList += "\n" + (i+2) + ". " + ghosts[i].id;
+        }
 
-            this.rankList = game.add.text(
-                game.world.width/2, 
-                300, 
-                rankList, 
-                { font: '20px Arial', fill: '#fff' }
-            );
-            this.winnerText.anchor.setTo(0.5, 0.5);
-            // Show name of the first 2 and say "Blaha, Blöhö and the rest of you suck"
-        // Show restart button
-
-        this.gameOver = true;
+        this.rankList = game.add.text(
+            game.world.width/2, 
+            300, 
+            rankList, 
+            { font: '20px Arial', fill: '#fff' }
+        );
+        this.winnerText.anchor.setTo(0.5, 0.5);
 
         var _this = this;
         setTimeout(function () {
