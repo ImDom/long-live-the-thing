@@ -236,7 +236,7 @@ var playState = {
                 runner.id + randomText,
                 { font: '20px Arial', fill: '#fff' }
             );
-            this.runnerDiedText.anchor.setTo(0.5, 0.2);
+            this.runnerDiedText.anchor.setTo(0.5, 0.5);
 
             runner.time = new Date().getTime();
             this.ghosts[id] = runner;
@@ -278,6 +278,10 @@ var playState = {
 
         var numGhosts = ghosts.length;
         var numListGhosts = numGhosts > 5 ? 5 : numGhosts;
+
+        if (this.runnerDiedText) {
+            this.runnerDiedText.destroy();
+        }
         
         // Show winner name
         var text = "You all died at the same time! No winner :)";
@@ -286,8 +290,8 @@ var playState = {
         }
 
         this.winnerText = game.add.text(
-            game.world.width/2, 
-            200,
+            game.world.width/2,
+            70,
             text,
             { font: '30px Arial', fill: '#fff' }
         );
@@ -306,19 +310,19 @@ var playState = {
         }
 
         this.rankList = game.add.text(
-            game.world.width/2, 
-            300, 
+            game.world.width / 2,
+            150,
             rankList, 
-            { font: '20px Arial', fill: '#fff' }
+            { font: '20px Arial', fill: '#000000' }
         );
-        this.rankList.anchor.setTo(0.5, 0.5);
+        this.rankList.anchor.setTo(0.5, 1);
 
         this.showCountDown(
             15,
             'New game starts in',
-            'New game starts in',
+            '15px Arial',
             game.world.width/2,
-            250,
+            20,
             this.restartGame.bind(this)
         );
     }
