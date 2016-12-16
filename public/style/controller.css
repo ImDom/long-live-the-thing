@@ -67,6 +67,7 @@ input {
 button {
     font-family: 'Gotham', Arial;
     font-size: 14px;
+    font-weight: 500;
     border: 0;
     margin: 0;
     background-color: #4444ff;
