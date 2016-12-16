@@ -39,7 +39,7 @@ var playState = {
         this.ghosts = {};
 
         this.music = game.add.audio("music");
-        this.music.volume = 0.05;
+        this.music.volume = 0;
 
         this.bindController();
 
@@ -47,9 +47,6 @@ var playState = {
         this.showMenu();
 
         this.gameOver = false;
-
-        // TODO remove !!
-        game.sound.mute = true;
     },
 
     pauseGame: function () {
@@ -71,7 +68,7 @@ var playState = {
             game.world.height/2 + 100, 
             '', 
             { font: '20px Arial', fill: '#fff' }
-        )
+        );
         this.numPlayers.anchor.setTo(0.5, 0.5);
     },
 

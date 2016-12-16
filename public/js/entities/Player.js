@@ -24,7 +24,7 @@ Player = function (id, runnerIndex, onDieCallback) {
     this.runner.body.gravity.y = this.gravity;
 
     this.jumpSound = game.add.audio("jump");
-    this.jumpSound.volume = 0.1;
+    this.jumpSound.volume = 0;
 };
 
 Player.prototype = {
