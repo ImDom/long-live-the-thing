@@ -218,11 +218,7 @@ var playState = {
     },
 
     checkState: function () {
-<<<<<<< HEAD
-        if (Object.keys(this.runners).length <= 1) {
-=======
         if (Object.keys(this.runners).length === (SP ? 0 : 1)) {
->>>>>>> SP flag and patterns
             // TODO - All runners except for one are dead
             this.pauseGame();
             this.endGame();
