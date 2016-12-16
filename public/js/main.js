@@ -187,17 +187,16 @@ var playState = {
         });
 
         socket.on("powerUp", function (data) {
-            if (game.paused) { return; }
+            if (game.paused || _this.gameOver) { return; }
 
-            this.powerUpText = game.add.text(
+            _this.powerUpText = game.add.text(
                 game.world.width/2,
                 50,
                 "Someone got a freeze power up!",
                 { font: '20px Arial', fill: '#fff' }
             );
-            this.powerUpText.anchor.setTo(0.5, 0.5);
+            _this.powerUpText.anchor.setTo(0.5, 0.5);
 
-            var _this = this;
             setTimeout(function () {
                 _this.powerUpText.destroy();
                 _this.powerUpText = undefined;
@@ -298,6 +297,14 @@ var playState = {
         this.music.volume = 0.1;
         this.cheers.play();
 
+        if (this.runnerDiedText) {
+            this.runnerDiedText.destroy();
+        }
+
+        if (this.powerUpText) {
+            this.powerUpText.destroy();
+        }
+
         // It can happen that everyone died at the same time
         var winnerIndex = Object.keys(this.runners)[0];
         var winner;
@@ -312,10 +319,6 @@ var playState = {
         var numGhosts = ghosts.length;
         var numListGhosts = numGhosts > 5 ? 5 : numGhosts;
 
-        if (this.runnerDiedText) {
-            this.runnerDiedText.destroy();
-        }
-        
         // Show winner name
         var text = "You all died at the same time! No winner :)";
         if (winner) {
