@@ -88,6 +88,7 @@ Player.prototype = {
             { font: '30px Arial', fill: '#fff' }
         );
         popUp.anchor.setTo(0.5, 0.5);
+        popUp.body.velocity.y = -5;
         _this.isFrozen = true;
 
         setTimeout(function() { 

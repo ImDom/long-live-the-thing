@@ -1,4 +1,4 @@
-var SP = true;
+var SP = false;
 var game, socket, socketController;
 
 var gameOptions = {
@@ -242,6 +242,7 @@ var playState = {
                 { font: '20px Arial', fill: '#fff' }
             );
             this.runnerDiedText.anchor.setTo(0.5, 0.5);
+            this.runnerDiedText.body.velocity.y = -5;
 
             runner.time = new Date().getTime();
             this.ghosts[id] = runner;
@@ -301,6 +302,7 @@ var playState = {
             { font: '30px Arial', fill: '#fff' }
         );
         this.winnerText.anchor.setTo(0.5, 0.5);
+        this.winnerText.body.velocity.y = -5;
 
         // Show rank list
         var rankList = "";
