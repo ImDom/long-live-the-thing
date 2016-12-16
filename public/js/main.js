@@ -144,7 +144,7 @@ var playState = {
                     var player = _this.findRandomRunner();
                     console.log("Random player", player)
                     if (player) {
-                        player.freeze(data.id, gameOptions.freezeMs);
+                        player.freeze(gameOptions.freezeMs, data.id);
                     }
                     break;
             }
@@ -209,6 +209,7 @@ var playState = {
     },
 
     checkState: function () {
+
         if (Object.keys(this.runners).length === 1) {
             // TODO - All runners except for one are dead
             game.paused = true;
