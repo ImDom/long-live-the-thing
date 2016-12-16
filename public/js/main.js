@@ -351,7 +351,7 @@ var playState = {
             rankList, 
             { font: '20px Arial', fill: '#000000' }
         );
-        this.rankList.anchor.setTo(0.5, 1);
+        this.rankList.anchor.setTo(0.5, 0);
 
         this.showCountDown(
             15,
