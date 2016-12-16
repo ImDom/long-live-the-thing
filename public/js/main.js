@@ -75,38 +75,48 @@ var playState = {
         this.numPlayers.anchor.setTo(0, 0);
     },
 
-    startCountdown: function () {
-        var time = SP ? 2 : 10;
-
-        if (this.countdownInterval || (!SP && Object.keys(this.runners).length < 2)) {
-            return;
-        }
-        
+    showCountDown: function(seconds, text, font, x, y, callback) {
+        var time = seconds;
         var _this = this;
         this.countdownInterval = setInterval(function () {
             _this.menu.destroy();
             --time;
 
             if (_this.timerText) {
-                _this.timerText.setText('The game starts in ' + time + ' seconds');
+                _this.timerText.setText(text + ' ' + time + ' seconds');
             } else {
                 _this.timerText = game.add.text(
-                    game.world.width/2, 
-                    game.world.height/2, 
-                    'The game starts in ' + time + ' seconds', 
-                    { font: '30px Arial', fill: '#fff' }
+                    x,
+                    y,
+                    text + ' ' + time + ' seconds',
+                    { font: font, fill: '#fff' }
                 );
                 _this.timerText.anchor.setTo(0.5, 0.5);
             }
 
             if (time <= 0) {
-                _this.startGame();
+                callback();
                 clearInterval(_this.countdownInterval);
                 _this.countdownInterval = undefined;
                 _this.timerText.destroy();
                 _this.timerText = undefined;
             }
         }, 1000);
+    },
+
+    startCountdown: function () {
+        if (this.countdownInterval || (!SP && Object.keys(this.runners).length < 2)) {
+            return;
+        }
+
+        this.showCountDown(
+            SP ? 2 : 10,
+            'The game starts in',
+            '30px Arial',
+            game.world.width/2,
+            game.world.height/2,
+            this.startGame.bind(this)
+        );
     },
 
     startGame: function () {
@@ -116,6 +126,12 @@ var playState = {
             this.music.play();
             socket.emit("start game");
         }
+    },
+
+    restartGame: function () {
+        game.paused = false;
+        game.state.restart();
+        socket.emit("end game");
     },
 
     bindController: function () {
@@ -241,7 +257,7 @@ var playState = {
     },
 
     checkState: function () {
-        if (Object.keys(this.runners).length === (SP ? 0 : 1)) {
+        if (Object.keys(this.runners).length <= (SP ? 0 : 1)) {
             // TODO - All runners except for one are dead
             this.pauseGame();
             this.endGame();
@@ -297,13 +313,14 @@ var playState = {
         );
         this.rankList.anchor.setTo(0.5, 0.5);
 
-        var _this = this;
-        setTimeout(function () {
-            game.paused = false;
-            _this.music.play();
-            game.state.restart();
-            socket.emit("end game");
-        }, 5000);
+        this.showCountDown(
+            15,
+            'New game starts in',
+            'New game starts in',
+            game.world.width/2,
+            250,
+            this.restartGame.bind(this)
+        );
     }
 };
 
