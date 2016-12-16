@@ -24,6 +24,7 @@ var playState = {
     },
 
     create: function () {
+        console.log("Create again?")
         // Connect socket
         socket = io.connect('/game');
 
@@ -44,6 +45,8 @@ var playState = {
         var music = game.add.audio("music");
         music.loopFull();
         music.volume = 0.05;
+
+        this.gameOver = false;
     },
 
     showMenu: function () {
@@ -74,7 +77,6 @@ var playState = {
         var _this = this;
         this.countdownInterval = setInterval(function () {
             _this.menu.destroy();
-            console.log("Start timer", time)
             --time;
 
             if (_this.timerText) {
@@ -94,6 +96,7 @@ var playState = {
                 clearInterval(_this.countdownInterval);
                 _this.countdownInterval = undefined;
                 _this.timerText.destroy();
+                _this.timerText = undefined;
             }
         }, 1000);
     },
@@ -122,6 +125,10 @@ var playState = {
 
         socket.on("start game", function (data) {
             _this.startGame();
+        });
+
+        socket.on("restart game", function (data) {
+            game.state.start("play");
         });
 
         socket.on("controller action", function (data) {
@@ -183,6 +190,7 @@ var playState = {
         var runner = this.findRunner(id);
         if (runner) {
             console.log("this runner died:", runner);
+            runner.time = new Date().getTime();
             this.ghosts[id] = runner;
             delete this.runners[id];
         }
@@ -201,14 +209,53 @@ var playState = {
     },
 
     checkState: function () {
-        if (Object.keys(this.runners).length === 0) {
-            // TODO - All runners are dead, endgame
+        if (Object.keys(this.runners).length === 1) {
+            // TODO - All runners except for one are dead
             game.paused = true;
+            this.endGame();
         }
     },
 
-    endGame: function () {
-        // TODO
+    endGame: function (winner) {
+        var winner = this.runners[Object.keys(this.runners)[0]];
+        var ghosts = Object.values(this.ghosts).sort(function(a, b) {
+            return a.time - b.time;
+        });
+
+        var numGhosts = ghosts.length
+        var numListGhosts = numGhosts > 5 ? 5 : numGhosts;
+        
+        // Show winner name
+        this.winnerText = game.add.text(
+            game.world.width/2, 
+            200, 
+            'Congratulations ' + winner.id + ', you are the winner!', 
+            { font: '30px Arial', fill: '#fff' }
+        );
+        this.winnerText.anchor.setTo(0.5, 0.5);
+        // Show rank list
+            var rankList = "1. " + winner.id
+            for (var i = 0; i < numGhosts; ++i) {
+                rankList += "\n" + (i+2) + ". " + ghosts[i].id;
+            }
+
+            this.rankList = game.add.text(
+                game.world.width/2, 
+                300, 
+                rankList, 
+                { font: '20px Arial', fill: '#fff' }
+            );
+            this.winnerText.anchor.setTo(0.5, 0.5);
+            // Show name of the first 2 and say "Blaha, Blöhö and the rest of you suck"
+        // Show restart button
+
+        this.gameOver = true;
+
+        setTimeout(function () {
+            game.paused = false;
+            game.state.restart();
+            socket.emit("end game");
+        }, 5000);
     }
 };
 
