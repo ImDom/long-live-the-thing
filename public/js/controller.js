@@ -1,7 +1,7 @@
 var socket = io.connect('/controller');
 
 var canFreeze = false;
-
+var jumped = false;
 var actions = {
     moveForward: function () {
         socket.emit('moveForward');
@@ -12,13 +12,21 @@ var actions = {
     },
 
     jump: function () {
-      socket.emit('controller action', {action: 'jump'});
+        if (jumped) {
+            return;
+        }
+        socket.emit('controller action', {action: 'jump'});
+        jumped = true;
+        setTimeout(function () {
+            jumped = false;
+        }, 100)
     },
 
     freeze: function () {
         if (canFreeze) {
             socket.emit('controller action', {action: 'freeze'});
             document.getElementById('freeze').style.display = 'none';
+            canFreeze = false;
         }
     },
 
@@ -42,8 +50,7 @@ socket.on('color', function(data) {
 });
 
 socket.on("end game", function (data) {
-    document.getElementById('controller').style.display = "none";
-    document.getElementById('menu').style.display = "flex";
+    location.reload();
 });
 
 document.getElementById("name").value = window.localStorage.getItem("name");
