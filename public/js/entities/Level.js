@@ -16,7 +16,7 @@ Level = function() {
         game.world.height - gameOptions.floorHeight,
         game.world.width,
         gameOptions.floorHeight,
-        'ground'
+        'floor'
     );
 
     game.physics.enable(this.floor, Phaser.Physics.ARCADE);

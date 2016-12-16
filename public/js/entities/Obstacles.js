@@ -35,7 +35,7 @@ Obstacles.prototype = {
                 game.world.height - 10 - BLOCK_SIZE,
                 BLOCK_SIZE,
                 BLOCK_SIZE,
-                "obstacle"
+                "ground"
             );
 
             sprite.body.velocity.x = SPEED;
@@ -62,21 +62,12 @@ Obstacles.prototype = {
             for (var colIndex = 0; colIndex < row.length; colIndex++) {
                 var part = row[colIndex];
                 var kill = false;
-                var sprite;
+                var sprite, image;
 
                 switch (part) {
                     case "#":
                     case "x":
-                        var x = game.world.width + (45 * colIndex);
-                        var y = game.world.height - 10 - BLOCK_SIZE - (BLOCK_SIZE * ((pattern.length - 1) - rowIndex));
                         
-                        sprite = game.add.tileSprite(
-                            game.math.snapToCeil(x, BLOCK_SIZE),
-                            y,
-                            BLOCK_SIZE,
-                            BLOCK_SIZE,
-                            "obstacle"
-                        );
                         break;
 
                     case "_":
@@ -84,7 +75,18 @@ Obstacles.prototype = {
                         break;
                 }
 
-                if (sprite) {
+                if (part !== "_") {
+                    var x = game.world.width + (45 * colIndex);
+                    var y = game.world.height - 10 - BLOCK_SIZE - (BLOCK_SIZE * ((pattern.length - 1) - rowIndex));
+                    
+                    sprite = game.add.tileSprite(
+                        game.math.snapToCeil(x, BLOCK_SIZE),
+                        y,
+                        BLOCK_SIZE,
+                        BLOCK_SIZE,
+                        part === "#" ? "obstacle" : (rowIndex < 3 ? "cloud" : "ground")
+                    );
+
                     sprite.body.velocity.x = SPEED;
                     sprite.body.friction.y = 0;
                     sprite.body.friction.x = 0;
