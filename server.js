@@ -55,6 +55,8 @@ function onSocketGameConnection (client) {
 
     client.on("start game", onGameStart);
     client.on("end game", onGameEnd);
+
+    client.on("disconnect", onGameEnd);
 }
 
 function onSocketControllerConnection (client) {
