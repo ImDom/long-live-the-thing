@@ -54,13 +54,11 @@ Player.prototype = {
         } else if (this.runner.x > game.world.width) {
             this.runner.x = game.world.width;
         }
-
-        return this.isDead;
     },
 
     die: function () {
         this.isDead = true;
-        this.runner.kill();
+        this.runner.destroy();
         this.onDieCallback(this.id);
     },
 
