@@ -1,4 +1,4 @@
-var SP = true;
+var SP = false;
 
 var game, socket;
 
