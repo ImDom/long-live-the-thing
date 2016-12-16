@@ -117,7 +117,7 @@ var playState = {
         }
 
         this.showCountDown(
-            SP ? 2 : 60,
+            SP ? 2 : 20,
             'The game starts in',
             '30px Arial',
             game.world.width/2,
