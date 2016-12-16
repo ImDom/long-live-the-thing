@@ -1,6 +1,5 @@
 var SP = false;
-
-var game, socket;
+var game, socket, socketController;
 
 var gameOptions = {
     width: 1024,
@@ -30,6 +29,7 @@ var playState = {
         console.log("Create again?");
         // Connect socket
         socket = io.connect('/game');
+        socketController = io.connect('/controller');
 
         // Add the physics engine to all game objects
         game.world.enableBody = true;
@@ -121,7 +121,7 @@ var playState = {
         // Bind controller
         var _this = this;
         socket.on("new player", function (data) {
-            _this.newRunner(data.name);
+            _this.newRunner(data.name, data.id);
 
             if (game.paused && !this.gameStarted) {
                 _this.startCountdown();
@@ -182,16 +182,21 @@ var playState = {
         return this.runners[keys[keys.length * Math.random() << 0]];
     },
 
-    newRunner: function (id) {
+    newRunner: function (id, socketId) {
         if (!game.paused) { return; }
 
         var runnerIndex = Object.keys(this.runners).length;
         if (!this.runners[id] && !this.ghosts[id] && runnerIndex < playerColors.length) {
             this.runners[id] = new Player(
                 id,
+                socketId,
                 runnerIndex,
                 this.onRunnerDied.bind(this)
             );
+            
+            var tint = this.runners[id].tint;
+            console.log(socketId, this.runners[id])
+            socketController.to(socketId).emit("tint", tint);
         }
     },
 

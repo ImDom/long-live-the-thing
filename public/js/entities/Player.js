@@ -1,8 +1,9 @@
 /**
  * Create a player
  */
-Player = function (id, runnerIndex, onDieCallback) {
+Player = function (id, socketId, runnerIndex, onDieCallback) {
     this.id = id;
+    this.socketId = socketId;
     this.size = 30;
     this.gravity = 1000;
     this.jumpForce = -350;

@@ -91,7 +91,7 @@ function onGameStart () {
 }
 
 function onGameEnd () {
-    currentPlayers = [];
+    currentPlayerIds = [];
     console.log("Game End");
     socketController.emit("end game");
 }

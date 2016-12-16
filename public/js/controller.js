@@ -35,6 +35,10 @@ socket.on('powerUp', function(data) {
     document.getElementById('freeze').style.display = 'block';
 });
 
+socket.on('color', function(data) {
+    console.log(data);
+});
+
 socket.on("end game", function (data) {
     document.getElementById('controller').style.display = "none";
     document.getElementById('menu').style.display = "flex";
