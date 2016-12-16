@@ -1,4 +1,4 @@
-var SP = false;
+var SP = true;
 var game, socket, socketController;
 
 var gameOptions = {
@@ -311,7 +311,6 @@ var playState = {
             { font: '30px Arial', fill: '#fff' }
         );
         this.winnerText.anchor.setTo(0.5, 0.5);
-        this.winnerText.body.velocity.y = -5;
 
         // Show rank list
         var rankList = "";
