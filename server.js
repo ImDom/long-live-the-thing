@@ -54,6 +54,7 @@ function onSocketGameConnection (client) {
     util.log('Game client has connected: ' + client.id);
 
     client.on("start game", onGameStart);
+    client.on("end game", onGameEnd);
 }
 
 function onSocketControllerConnection (client) {
@@ -71,6 +72,11 @@ function onSocketControllerConnection (client) {
 function onGameStart () {
     console.log("Game Start")
     socketController.emit("start game");
+}
+
+function onGameEnd () {
+    console.log("Game End")
+    socketController.emit("end game");
 }
 
 function onControllerReady (data) {

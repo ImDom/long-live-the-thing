@@ -29,7 +29,9 @@ var actions = {
     }
 };
 
-socket.on("start game", function (data) {
+socket.on("end game", function (data) {
+    document.getElementById('controller').style.display = "none";
+    document.getElementById('menu').style.display = "flex";
 });
 
 document.getElementById("name").value = window.localStorage.getItem("name");
