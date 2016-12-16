@@ -64,12 +64,12 @@ var playState = {
         );
         this.menu.anchor.setTo(0.5, 0.5);
         this.numPlayers = game.add.text(
-            game.world.width/2, 
-            game.world.height/2 + 100, 
+            10,
+            10,
             '', 
-            { font: '20px Arial', fill: '#fff' }
+            { font: '14px Arial', fill: '#fff' }
         );
-        this.numPlayers.anchor.setTo(0.5, 0.5);
+        this.numPlayers.anchor.setTo(0, 0);
     },
 
     startCountdown: function () {
@@ -120,6 +120,8 @@ var playState = {
         var _this = this;
         socket.on("new player", function (data) {
             _this.newRunner(data.name);
+
+            _this.updateNumPlayersText();
 
             if (game.paused && !this.gameStarted) {
                 _this.startCountdown();
@@ -196,7 +198,21 @@ var playState = {
     onRunnerDied: function (id) {
         var runner = this.findRunner(id);
         if (runner) {
-            console.log("this runner died:", runner);
+            if (this.runnerDiedText) {
+                this.runnerDiedText.destroy();
+            }
+
+            var randomIndex = Math.floor(Math.random() * (dieTexts.length - 1));
+            var randomText = dieTexts[randomIndex];
+
+            this.runnerDiedText = game.add.text(
+                game.world.width/2,
+                50,
+                runner.id + randomText,
+                { font: '20px Arial', fill: '#fff' }
+            );
+            this.runnerDiedText.anchor.setTo(0.5, 0.2);
+
             runner.time = new Date().getTime();
             this.ghosts[id] = runner;
             delete this.runners[id];
@@ -212,7 +228,7 @@ var playState = {
     },
 
     updateNumPlayersText: function () {
-        this.numPlayers.setText(Object.keys(this.runners).length + " players connected");
+        this.numPlayers.setText(Object.keys(this.runners).length + " player(s) connected");
     },
 
     checkState: function () {
