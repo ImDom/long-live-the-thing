@@ -63,7 +63,7 @@ Player.prototype = {
     die: function () {
         if (!this.isDead) {
             this.isDead = true;
-            this.runner.destroy();
+            this.runner.kill();
             this.onDieCallback(this.id);
         } 
     },
