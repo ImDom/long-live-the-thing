@@ -137,7 +137,7 @@ var playState = {
                     var player = _this.findRandomRunner();
                     console.log("Random player", player)
                     if (player) {
-                        player.freeze(gameOptions.freezeMs);
+                        player.freeze(data.id, gameOptions.freezeMs);
                     }
                     break;
             }
@@ -163,7 +163,7 @@ var playState = {
 
     findRandomRunner: function() {
         var keys = Object.keys(this.runners)
-        return this.runners[keys[ keys.length * Math.random() << 0]];
+        return this.runners[keys[keys.length * Math.random() << 0]];
     },
 
     newRunner: function (id) {

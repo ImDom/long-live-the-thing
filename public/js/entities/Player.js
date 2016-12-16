@@ -68,11 +68,23 @@ Player.prototype = {
         }
     },
 
-    freeze: function(milliSecs) {
-        console.log("freezing for ", milliSecs)
+    freeze: function(milliSecs, freezerId) {
+        console.log("freezing ", milliSecs, freezerId)
         var _this = this;
+        
+        var popUp = game.add.text(
+            game.world.width/2, 
+            game.world.height/2, 
+            freezerId + " froze " + this.id + " for " + Math.min(milliSecs / 1000) + "!", 
+            { font: '30px Arial', fill: '#fff' }
+        );
+        popUp.anchor.setTo(0.5, 0.5);
         _this.isFrozen = true;
-        setTimeout(function() { _this.isFrozen = false; }, milliSecs)
+
+        setTimeout(function() { 
+            _this.isFrozen = false;
+            popUp.destroy();
+        }, milliSecs);
     },
 
     buildObstacle: function () {
