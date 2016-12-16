@@ -6,6 +6,8 @@ var io = require('socket.io');
 
 var port = process.env.PORT || 8080;
 
+var currentPlayerIds = [];
+
 /* ************************************************
 ** GAME VARIABLES
 ************************************************ */
@@ -60,6 +62,7 @@ function onSocketGameConnection (client) {
 }
 
 function onSocketControllerConnection (client) {
+    currentPlayerIds.push(client.id);
     util.log('New player has connected: ' + client.id);
 
     // Listen for client disconnected
@@ -71,13 +74,25 @@ function onSocketControllerConnection (client) {
     client.on('ready', onControllerReady)
 }
 
+function findRandomPlayerId() {
+    return currentPlayerIds[Math.floor(Math.random() * currentPlayerIds.length)];
+}
+
+function giveFreeze() {
+    var playerId = findRandomPlayerId();
+    console.log("Giving freeze to playerId", playerId);
+    //TODO: push the powerup to the playerId and push the message to game 
+}
+
 function onGameStart () {
     console.log("Game Start")
     socketController.emit("start game");
+    setTimeout(giveFreeze, 20 * 1000);
 }
 
 function onGameEnd () {
-    console.log("Game End")
+    currentPlayers = [];
+    console.log("Game End");
     socketController.emit("end game");
 }
 

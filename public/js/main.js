@@ -1,3 +1,5 @@
+var SP = false;
+
 var game, socket;
 
 var gameOptions = {
@@ -75,7 +77,7 @@ var playState = {
     startCountdown: function () {
         var time = 10;
 
-        if (this.countdownInterval || Object.keys(this.runners).length < 2) {
+        if (this.countdownInterval || (!SP && Object.keys(this.runners).length < 2)) {
             return;
         }
         
@@ -232,7 +234,7 @@ var playState = {
     },
 
     checkState: function () {
-        if (Object.keys(this.runners).length <= 1) {
+        if (Object.keys(this.runners).length === (SP ? 0 : 1)) {
             // TODO - All runners except for one are dead
             this.pauseGame();
             this.endGame();
