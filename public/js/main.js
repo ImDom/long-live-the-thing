@@ -1,3 +1,5 @@
+var SP = false;
+
 var game, socket;
 
 var gameOptions = {
@@ -39,19 +41,14 @@ var playState = {
         this.ghosts = {};
 
         this.music = game.add.audio("music");
-        this.music.volume = 0.05;
+        this.music.volume = 0;
 
         this.bindController();
 
         this.pauseGame();
         this.showMenu();
-
-        var music = game.add.audio("music");
-        music.loopFull();
-        music.volume = 0.0;
-
-        // TODO remove !!
-        game.sound.mute = true;
+        this.gameOver = false;
+        this.gameStarted = false;
     },
 
     pauseGame: function () {
@@ -73,14 +70,14 @@ var playState = {
             game.world.height/2 + 100, 
             '', 
             { font: '20px Arial', fill: '#fff' }
-        )
+        );
         this.numPlayers.anchor.setTo(0.5, 0.5);
     },
 
     startCountdown: function () {
         var time = 10;
 
-        if (this.countdownInterval || Object.keys(this.runners).length < 2) {
+        if (this.countdownInterval || (!SP && Object.keys(this.runners).length < 2)) {
             return;
         }
         
@@ -114,6 +111,7 @@ var playState = {
     startGame: function () {
         if (game.paused) {
             game.paused = false;
+            this.gameStarted = true;
             this.music.play();
             socket.emit("start game");
         }
@@ -125,7 +123,7 @@ var playState = {
         socket.on("new player", function (data) {
             _this.newRunner(data.name);
 
-            if (game.paused) {
+            if (game.paused && !this.gameStarted) {
                 _this.startCountdown();
             }
         });
@@ -153,7 +151,7 @@ var playState = {
 
                 case "freeze":
                     var player = _this.findRandomRunner();
-                    console.log("Random player", player)
+                    console.log("Random player", player);
                     if (player) {
                         player.freeze(gameOptions.freezeMs, data.id);
                     }
@@ -180,7 +178,7 @@ var playState = {
     },
 
     findRandomRunner: function() {
-        var keys = Object.keys(this.runners)
+        var keys = Object.keys(this.runners);
         return this.runners[keys[keys.length * Math.random() << 0]];
     },
 
@@ -220,8 +218,7 @@ var playState = {
     },
 
     checkState: function () {
-
-        if (Object.keys(this.runners).length === 1) {
+        if (Object.keys(this.runners).length === (SP ? 0 : 1)) {
             // TODO - All runners except for one are dead
             this.pauseGame();
             this.endGame();
@@ -229,7 +226,13 @@ var playState = {
     },
 
     endGame: function (winner) {
-        var winner = this.runners[Object.keys(this.runners)[0]];
+        // It can happen that everyone died at the same time
+        var winnerIndex = Object.keys(this.runners)[0];
+        var winner;
+        if (winnerIndex) {
+            winner = this.runners[winnerIndex];
+        }
+
         var ghosts = Object.values(this.ghosts).sort(function(a, b) {
             return b.time - a.time;
         });
@@ -238,18 +241,29 @@ var playState = {
         var numListGhosts = numGhosts > 5 ? 5 : numGhosts;
         
         // Show winner name
+        var text = "You all died at the same time! No winner :)";
+        if (winner) {
+            text = 'Congratulations ' + winner.id + ', you are the winner!'
+        }
+
         this.winnerText = game.add.text(
             game.world.width/2, 
-            200, 
-            'Congratulations ' + winner.id + ', you are the winner!', 
+            200,
+            text,
             { font: '30px Arial', fill: '#fff' }
         );
         this.winnerText.anchor.setTo(0.5, 0.5);
 
         // Show rank list
-        var rankList = "1. " + winner.id
-        for (var i = 0; i < numGhosts; ++i) {
-            rankList += "\n" + (i+2) + ". " + ghosts[i].id;
+        var rankList = "";
+        var startIndex = 1;
+        if (winner) {
+            rankList = "1. " + winner.id;
+            startIndex = 2;
+        }
+
+        for (var i = 0; i < numListGhosts; ++i) {
+            rankList += "\n" + (i + startIndex) + ". " + ghosts[i].id;
         }
 
         this.rankList = game.add.text(
@@ -258,7 +272,7 @@ var playState = {
             rankList, 
             { font: '20px Arial', fill: '#fff' }
         );
-        this.winnerText.anchor.setTo(0.5, 0.5);
+        this.rankList.anchor.setTo(0.5, 0.5);
 
         var _this = this;
         setTimeout(function () {
