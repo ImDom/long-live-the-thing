@@ -210,7 +210,7 @@ var playState = {
     },
 
     checkState: function () {
-        if (Object.keys(this.runners).length === 1) {
+        if (Object.keys(this.runners).length === 0) {
             // TODO - All runners except for one are dead
             game.paused = true;
             this.endGame();
