@@ -1,6 +1,6 @@
 var socket = io.connect('/controller');
 
-var canFreeze = true;
+var canFreeze = false;
 
 var actions = {
     moveForward: function () {
@@ -18,12 +18,7 @@ var actions = {
     freeze: function () {
         if (canFreeze) {
             socket.emit('controller action', {action: 'freeze'});
-            canFreeze = false;
             document.getElementById('freeze').style.display = 'none';
-            setTimeout(function() {
-                canFreeze = true;
-                document.getElementById('freeze').style.display = 'block';
-            }, 5000);
         }
     },
 
@@ -34,6 +29,11 @@ var actions = {
         window.localStorage.setItem("name", document.getElementById("name").value);
     }
 };
+
+socket.on('powerUp', function(data) {
+    canFreeze = true;
+    document.getElementById('freeze').style.display = 'block';
+});
 
 socket.on("end game", function (data) {
     document.getElementById('controller').style.display = "none";
