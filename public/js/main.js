@@ -45,7 +45,7 @@ var playState = {
         this.showMenu();
         var music = game.add.audio("music");
         music.loopFull();
-        music.volume = 0.05;
+        music.volume = 0.0;
 
         this.gameOver = false;
     },
@@ -71,7 +71,7 @@ var playState = {
     startCountdown: function () {
         var time = 10;
 
-        if (this.countdownInterval || Object.keys(this.runners).length < 1) {
+        if (this.countdownInterval || Object.keys(this.runners).length < 2) {
             return;
         }
         
@@ -210,7 +210,7 @@ var playState = {
     },
 
     checkState: function () {
-        if (Object.keys(this.runners).length === 0) {
+        if (Object.keys(this.runners).length === 1) {
             // TODO - All runners except for one are dead
             game.paused = true;
             this.endGame();
@@ -234,22 +234,21 @@ var playState = {
             { font: '30px Arial', fill: '#fff' }
         );
         this.winnerText.anchor.setTo(0.5, 0.5);
+
         // Show rank list
-            var rankList = "1. " + winner.id
-            for (var i = 0; i < numGhosts; ++i) {
-                rankList += "\n" + (i+2) + ". " + ghosts[i].id;
-            }
+        var rankList = "1. " + winner.id
+        for (var i = 0; i < numGhosts; ++i) {
+            rankList += "\n" + (i+2) + ". " + ghosts[i].id;
+        }
 
-            this.rankList = game.add.text(
-                game.world.width/2, 
-                300, 
-                rankList, 
-                { font: '20px Arial', fill: '#fff' }
-            );
-            this.winnerText.anchor.setTo(0.5, 0.5);
-            // Show name of the first 2 and say "Blaha, Blöhö and the rest of you suck"
-        // Show restart button
-
+        this.rankList = game.add.text(
+            game.world.width/2, 
+            300, 
+            rankList, 
+            { font: '20px Arial', fill: '#fff' }
+        );
+        this.winnerText.anchor.setTo(0.5, 0.5);
+        
         this.gameOver = true;
 
         setTimeout(function () {
