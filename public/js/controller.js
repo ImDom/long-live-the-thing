@@ -36,7 +36,9 @@ socket.on('powerUp', function(data) {
 });
 
 socket.on('color', function(data) {
-    console.log(data);
+    var color = data.toString(16);
+
+    document.getElementById('jump').style.backgroundColor = "#" + color;
 });
 
 socket.on("end game", function (data) {

@@ -26,7 +26,6 @@ var playState = {
     },
 
     create: function () {
-        console.log("Create again?");
         // Connect socket
         socket = io.connect('/game');
         socketController = io.connect('/controller');
@@ -187,16 +186,17 @@ var playState = {
 
         var runnerIndex = Object.keys(this.runners).length;
         if (!this.runners[id] && !this.ghosts[id] && runnerIndex < playerColors.length) {
-            this.runners[id] = new Player(
+            var player = new Player(
                 id,
                 socketId,
                 runnerIndex,
                 this.onRunnerDied.bind(this)
             );
+
+            this.runners[id] = player;
             
-            var tint = this.runners[id].tint;
-            console.log(socketId, this.runners[id])
-            socketController.to(socketId).emit("tint", tint);
+            var color = player.color;
+            socketController.emit("color", {socketId: socketId, color: color});
         }
     },
 

@@ -11,12 +11,13 @@ Player = function (id, socketId, runnerIndex, onDieCallback) {
     this.isDead = false;
     this.isFrozen = false;
     this.onDieCallback = onDieCallback;
+    this.color = playerColors[runnerIndex];
 
     //this.runner = game.add.sprite(300, game.world.height - this.size, "runner");
     this.runner = game.add.sprite(game.world.width / 2, game.world.height / 1.5, "runnerSS");
     this.runner.animations.add('walk');
 
-    this.runner.tint = playerColors[runnerIndex];
+    this.runner.tint = this.color;
     this.runner.anchor.set(0.5);
     this.runner.width = this.size;
     this.runner.height = this.size;

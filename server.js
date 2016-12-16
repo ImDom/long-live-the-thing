@@ -72,6 +72,12 @@ function onSocketControllerConnection (client) {
     client.on('controller action', onControllerAction);
 
     client.on('ready', onControllerReady)
+
+    client.on('color', function (data) {
+        console.log("color", data)
+
+        client.to(data.socketId).emit("color", data.color)
+    })
 }
 
 function findRandomPlayerId() {
