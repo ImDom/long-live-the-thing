@@ -34,7 +34,7 @@ var patterns = [
         '__xxxx_xxxx_xxxxxxx_____',
         '_____________________xxx',
         '___#_______##____xxxx___',
-        'xxxxxxx_xxxxxxxxx_______'
+        'xx_xxxx_xxxxxxxxx_______'
     ],
     [
         '________________________',
