@@ -34,6 +34,10 @@ Player = function (id, socketId, runnerIndex, onDieCallback) {
 
 Player.prototype = {
     update: function (blockGroup, killGroup, floorGroup) {
+        if (this.isDead) {
+            return;
+        }
+
         game.physics.arcade.collide(this.runner, blockGroup);
         game.physics.arcade.collide(this.runner, killGroup);  // Do do something else with these
         game.physics.arcade.collide(this.runner, floorGroup, this.die.bind(this));
@@ -59,13 +63,15 @@ Player.prototype = {
     },
 
     die: function () {
-        this.isDead = true;
-        this.runner.kill();
-        this.onDieCallback(this.id);
+        if (!this.isDead) {
+            this.isDead = true;
+            this.runner.kill();
+            this.onDieCallback(this.id);
+        } 
     },
 
     jump: function () {
-        if (this.canJump) {
+        if (this.canJump && !this.isDead) {
             var sound = this.jumpSounds[Math.floor(Math.random() * (this.jumpSounds.length - 1))];
             sound.volume = 0.4;
             sound.play();
