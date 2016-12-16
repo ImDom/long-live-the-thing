@@ -1,0 +1,26 @@
+var patterns = [
+    [
+        'xxxx_x_xx_xxxx_x_xx_xxxx'
+    ],
+    [
+        'x__xx_xxx_xxxxx_xxx__xxx'
+    ],
+    [
+        '__xx__x_x_xxxxx__xxx____',
+        '_____________________xxx',
+        '______x__________xxxxxxx',
+        'xxxxxxx_xxxxxxxxxxxxxxx_'
+    ],
+    [
+        '____xx____xxxxx__xxxxxxx',
+        '_xxxxxxxxx______________',
+        'x_______________xxxxxxxx'
+    ],
+    [
+        '________xxxxxxx__xxx__xx',
+        'xxxxxxx_________________',
+        '________xx______________',
+        '__xxxxxxxx__xxxxxxx_____',
+        'xxxxxxxxxxxxxxxxxxxxx__x'
+    ]
+];
