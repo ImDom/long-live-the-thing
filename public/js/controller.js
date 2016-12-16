@@ -1,24 +1,30 @@
 var socket = io.connect('/controller');
 
+var canFreeze = true;
+
 var actions = {
     moveForward: function () {
         socket.emit('moveForward');
-        console.log('Move Forward');
     },
 
     moveBackward: function () {
         socket.emit('moveBackward');
-        console.log('Move Backward');
     },
 
     jump: function () {
       socket.emit('controller action', {action: 'jump'});
-      console.log('Jump');
     },
 
     freeze: function () {
-      socket.emit('controller action', {action: 'freeze'});
-      console.log('Freeze');
+        if (canFreeze) {
+            socket.emit('controller action', {action: 'freeze'});
+            canFreeze = false;
+            document.getElementById('freeze').style.display = 'none';
+            setTimeout(function() {
+                canFreeze = true;
+                document.getElementById('freeze').style.display = 'block';
+            }, 5000);
+        }
     },
 
     ready: function () {
