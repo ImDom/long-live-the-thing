@@ -31,7 +31,7 @@ Obstacles.prototype = {
     addInitialBlocks: function () {
         for (var i = 0; i < 48; i++) {
             var sprite = game.add.tileSprite(
-                45 * i,
+                game.math.snapToCeil(BLOCK_SIZE * i, BLOCK_SIZE),
                 game.world.height - 10 - BLOCK_SIZE,
                 BLOCK_SIZE,
                 BLOCK_SIZE,
@@ -65,24 +65,17 @@ Obstacles.prototype = {
                 var sprite;
 
                 switch (part) {
+                    case "#":
                     case "x":
+                        var x = game.world.width + (45 * colIndex);
+                        var y = game.world.height - 10 - BLOCK_SIZE - (BLOCK_SIZE * ((pattern.length - 1) - rowIndex));
+                        
                         sprite = game.add.tileSprite(
-                            game.world.width + (45 * colIndex),
-                            game.world.height - 10 - BLOCK_SIZE - (BLOCK_SIZE * ((pattern.length - 1) - rowIndex)),
+                            game.math.snapToCeil(x, BLOCK_SIZE),
+                            y,
                             BLOCK_SIZE,
                             BLOCK_SIZE,
                             "obstacle"
-                        );
-                        break;
-
-                    case "#":
-                        kill = true;
-                        sprite = game.add.tileSprite(
-                            game.world.width + (BLOCK_SIZE * colIndex),
-                            game.world.height - 10 - BLOCK_SIZE - (BLOCK_SIZE * ((pattern.length - 1) - rowIndex)),
-                            BLOCK_SIZE,
-                            BLOCK_SIZE,
-                            "danger"
                         );
                         break;
 

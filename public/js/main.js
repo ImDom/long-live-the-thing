@@ -214,8 +214,12 @@ var playState = {
     },
 
     checkState: function () {
+<<<<<<< HEAD
 
         if (Object.keys(this.runners).length === 1) {
+=======
+        if (Object.keys(this.runners).length === 0) {
+>>>>>>> Tweak obstacles
             // TODO - All runners except for one are dead
             this.pauseGame();
             this.endGame();
