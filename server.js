@@ -14,6 +14,7 @@ var currentPlayerIds = [];
 var socket;
 var socketGame;
 var socketController;
+var gameStarted;
 
 /* ************************************************
 ** GAME INITIALISATION
@@ -74,32 +75,31 @@ function onSocketControllerConnection (client) {
     client.on('ready', onControllerReady)
 
     client.on('color', function (data) {
-        console.log("color", data)
-
         client.to(data.socketId).emit("color", data.color)
-    })
+    });
+
+    setInterval(function () {
+        if (!gameStarted) { return; }
+        client.to(findRandomPlayerId()).emit("powerUp", { type: "freeze" });
+        socketGame.emit("powerUp", { id: client.id });
+    }, 10 * 1000);
 }
 
 function findRandomPlayerId() {
     return currentPlayerIds[Math.floor(Math.random() * currentPlayerIds.length)];
 }
 
-function giveFreeze() {
-    var playerId = findRandomPlayerId();
-    console.log("Giving freeze to playerId", playerId);
-    //TODO: push the powerup to the playerId and push the message to game 
-}
-
 function onGameStart () {
     console.log("Game Start")
     socketController.emit("start game");
-    setTimeout(giveFreeze, 20 * 1000);
+    gameStarted = true;
 }
 
 function onGameEnd () {
     currentPlayerIds = [];
     console.log("Game End");
     socketController.emit("end game");
+    gameStarted = false;
 }
 
 function onControllerReady (data) {
@@ -113,6 +113,10 @@ function onControllerDisconnect () {
     util.log('Player has disconnected: ' + this.id);
 
     socketGame.emit('remove player', { id: this.id, name: this.controllerName });
+
+    currentPlayerIds = currentPlayerIds.filter(function (id) {
+        return id !== this.id;
+    });
 }
 
 // Controller has triggered an action
