@@ -32,7 +32,6 @@ Player.prototype = {
         game.physics.arcade.collide(this.runner, blockGroup);
         game.physics.arcade.collide(this.runner, killGroup);  // Do do something else with these
         game.physics.arcade.collide(this.runner, floorGroup, this.die.bind(this));
-        this.runner.body.velocity.x = 10;
 
         // if the hero has its feet on the ground, it can jump
         if (this.runner.body.touching.down) {
@@ -40,6 +39,9 @@ Player.prototype = {
                 this.canJump = true;
             }
             this.runner.animations.play('walk', 20, true);
+            this.runner.body.velocity.x = 10;
+        } else {
+            this.runner.body.velocity.x = 5;
         }
 
         if (this.runner.x < 0) {
