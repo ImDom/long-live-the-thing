@@ -85,13 +85,13 @@ button:active {
 
 .actionbar {
     flex-grow: 0;
-    height: 15%;
+    height: 20%;
 }
 
 .actionbar .action {
     position: relative;
     height: 100%;
-    width: 50%;
+    width: 100%;
     float: left;
     background-color: #000;
     -webkit-user-select: none;

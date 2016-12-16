@@ -52,11 +52,9 @@ Player.prototype = {
     },
 
     die: function () {
-        if (game.time.elapsedMS > 10000) {
-            this.isDead = true;
-            this.runner.kill();
-            this.onDieCallback(this.id);
-        }
+        this.isDead = true;
+        this.runner.kill();
+        this.onDieCallback(this.id);
     },
 
     jump: function () {

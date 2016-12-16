@@ -7,14 +7,14 @@ var patterns = [
     ],
     [
         '__xx__x_x_xxxxx__xxx____',
-        '__________xxxxx______xxx',
+        '_____________________xxx',
         '______x__________xxxxxxx',
         'xxxxxxx_xxxxxxxxxxxxxxx_'
     ],
     [
         '____xx____xxxxx__xxxxxxx',
         '_xxxxxxxxx______________',
-        'xxxxxxxxx_xxxxxxxxxxxxxx'
+        'x_______________xxxxxxxx'
     ],
     [
         '________xxxxxxx__xxx__xx',
@@ -48,11 +48,31 @@ Obstacles = function() {
     this.blockGroup = game.add.group();
     this.killGroup = game.add.group();
 
+    this.addInitialBlocks();
     game.time.events.loop(((BLOCK_SIZE * PATTERN_LENGTH) / Math.abs(SPEED)) * 1000, this.addPattern, this);
 };
 
 Obstacles.prototype = {
     update: function () {},
+
+    addInitialBlocks: function () {
+        for (var i = 0; i < 48; i++) {
+            var sprite = game.add.tileSprite(
+                45 * i,
+                game.world.height - 10 - BLOCK_SIZE,
+                BLOCK_SIZE,
+                BLOCK_SIZE,
+                "obstacle"
+            );
+
+            sprite.body.velocity.x = SPEED;
+            sprite.body.friction.y = 0;
+            sprite.body.friction.x = 0;
+            sprite.body.immovable = true;
+
+            this.blockGroup.add(sprite);
+        }
+    },
 
     addPattern: function () {
         var patternIndex = Math.floor(Math.random() * patterns.length);
