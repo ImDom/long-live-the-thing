@@ -16,19 +16,18 @@ var playState = {
         game.scale.pageAlignVertically = true;
 
         game.load.spritesheet('runnerSS', 'assets/runner_spritesheet.png', 50, 50);
-        game.load.image("ground", "assets/ground.png");
+        game.load.image("ground", "assets/danger.png");
         game.load.image("background", "assets/sky.png");
         game.load.image("danger", "assets/danger.png");
+        game.load.image("obstacle", "assets/ground.png");
         game.load.audio("music", "assets/song.mp3");
         game.load.audio("jump", "assets/jump.wav");
     },
 
     create: function () {
-        console.log("Create again?")
+        console.log("Create again?");
         // Connect socket
         socket = io.connect('/game');
-
-        game.paused = true;
 
         // Add the physics engine to all game objects
         game.world.enableBody = true;
@@ -39,18 +38,29 @@ var playState = {
         this.runners = {};
         this.ghosts = {};
 
+        this.music = game.add.audio("music");
+        this.music.volume = 0.05;
+
         this.bindController();
 
+        this.pauseGame();
         this.showMenu();
+
         var music = game.add.audio("music");
         music.loopFull();
-        music.volume = 0.05;
+        music.volume = 0.0;
 
-        this.gameOver = false;
+        // TODO remove !!
+        game.sound.mute = true;
+    },
+
+    pauseGame: function () {
+        this.music.stop();
+        game.paused = true;
     },
 
     showMenu: function () {
-        game.paused = true;
+        this.pauseGame();
         this.menu = game.add.text(
             game.world.width/2, 
             game.world.height/2, 
@@ -70,7 +80,7 @@ var playState = {
     startCountdown: function () {
         var time = 10;
 
-        if (this.countdownInterval || Object.keys(this.runners).length < 1) {
+        if (this.countdownInterval || Object.keys(this.runners).length < 2) {
             return;
         }
         
@@ -104,6 +114,7 @@ var playState = {
     startGame: function () {
         if (game.paused) {
             game.paused = false;
+            this.music.play();
             socket.emit("start game");
         }
     },
@@ -205,14 +216,14 @@ var playState = {
     },
 
     updateNumPlayersText: function () {
-        this.numPlayers.setText(Object.keys(this.players).length + " players connected");
+        this.numPlayers.setText(Object.keys(this.runners).length + " players connected");
     },
 
     checkState: function () {
 
         if (Object.keys(this.runners).length === 1) {
             // TODO - All runners except for one are dead
-            game.paused = true;
+            this.pauseGame();
             this.endGame();
         }
     },
@@ -220,10 +231,10 @@ var playState = {
     endGame: function (winner) {
         var winner = this.runners[Object.keys(this.runners)[0]];
         var ghosts = Object.values(this.ghosts).sort(function(a, b) {
-            return a.time - b.time;
+            return b.time - a.time;
         });
 
-        var numGhosts = ghosts.length
+        var numGhosts = ghosts.length;
         var numListGhosts = numGhosts > 5 ? 5 : numGhosts;
         
         // Show winner name
@@ -234,26 +245,25 @@ var playState = {
             { font: '30px Arial', fill: '#fff' }
         );
         this.winnerText.anchor.setTo(0.5, 0.5);
+
         // Show rank list
-            var rankList = "1. " + winner.id
-            for (var i = 0; i < numGhosts; ++i) {
-                rankList += "\n" + (i+2) + ". " + ghosts[i].id;
-            }
+        var rankList = "1. " + winner.id
+        for (var i = 0; i < numGhosts; ++i) {
+            rankList += "\n" + (i+2) + ". " + ghosts[i].id;
+        }
 
-            this.rankList = game.add.text(
-                game.world.width/2, 
-                300, 
-                rankList, 
-                { font: '20px Arial', fill: '#fff' }
-            );
-            this.winnerText.anchor.setTo(0.5, 0.5);
-            // Show name of the first 2 and say "Blaha, Blöhö and the rest of you suck"
-        // Show restart button
+        this.rankList = game.add.text(
+            game.world.width/2, 
+            300, 
+            rankList, 
+            { font: '20px Arial', fill: '#fff' }
+        );
+        this.winnerText.anchor.setTo(0.5, 0.5);
 
-        this.gameOver = true;
-
+        var _this = this;
         setTimeout(function () {
             game.paused = false;
+            _this.music.play();
             game.state.restart();
             socket.emit("end game");
         }, 5000);
