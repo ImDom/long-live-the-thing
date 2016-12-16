@@ -99,7 +99,7 @@ function onGameStart () {
         console.log("Give power up", randomPlayer);
         socketController.to(randomPlayer).emit("powerUp", { type: "freeze" });
         socketGame.emit("powerUp", { id: randomPlayer });
-    }, 5 * 1000);
+    }, 20 * 1000);
 }
 
 function onGameEnd () {
